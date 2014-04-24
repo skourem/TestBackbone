@@ -7,6 +7,7 @@ app.routers.AppRouter = Backbone.Router.extend({
 
     initialize: function () {
         app.slider = new PageSlider($('body'));
+        Reports.fetch();
     },
 
     home: function () {

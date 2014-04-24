@@ -1,7 +1,16 @@
 app.models.Report = Backbone.Model.extend({
+	toggle : function(){
+		this.save();
+	}
+});
 
-    initialize:function () {
-        console.log('model Report');
-    }
+
+app.models.ReportList = Backbone.Collection.extend({
+	
+	model: app.models.Report,
+
+    localStorage: new Backbone.LocalStorage("SmartCitizen_Reports")
 
 });
+
+var Reports = new app.models.ReportList;
