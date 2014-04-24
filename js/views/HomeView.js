@@ -12,6 +12,9 @@ app.views.HomeView = Backbone.View.extend({
 
     events : {
         'click a' : function() {
+            var r =  new app.models.Report( { 'name' : 'new model' } ) ;
+            Reports.add( r );
+            r.save();
             Reports.create({
                 'name' : 'stelios'
             });
