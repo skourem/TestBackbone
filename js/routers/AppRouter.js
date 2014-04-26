@@ -1,13 +1,15 @@
 app.routers.AppRouter = Backbone.Router.extend({
 
     routes: {
-        "":                         "home",
+        "home":                     "home",
+        "category":                 "category",
         "map":                      "map" 
     },
 
     initialize: function () {
         app.slider = new PageSlider($('body'));
-        Reports.fetch();
+        app.models.newReport = new app.models.Report();
+        //Reports.fetch();
     },
 
     home: function () {
@@ -20,6 +22,11 @@ app.routers.AppRouter = Backbone.Router.extend({
             app.homeView.delegateEvents(); // delegate events when the view is recycled
         }
         app.slider.slidePage(app.homeView.$el);
+    },
+
+    category: function () {
+        var x = new app.views.CategoryView();
+        app.slider.slidePage(new app.views.CategoryView().render().$el);
     },
 
     map: function () {

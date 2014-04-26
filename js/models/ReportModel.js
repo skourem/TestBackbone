@@ -13,4 +13,4 @@ app.models.ReportList = Backbone.Collection.extend({
 
 });
 
-var Reports = new app.models.ReportList;
+//var Reports = new app.models.ReportList;
