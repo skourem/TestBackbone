@@ -1,7 +1,7 @@
 app.routers.AppRouter = Backbone.Router.extend({
 
     routes: {
-        "home":                     "home",
+        "":                         "home",
         "category":                 "category",
         "map":                      "map" 
     },
@@ -22,12 +22,12 @@ app.routers.AppRouter = Backbone.Router.extend({
             app.homeView.delegateEvents(); // delegate events when the view is recycled
         }
         
-        app.slider.slidePage(app.homeView.$el);
+        //app.slider.slidePage(app.homeView.$el);
+        $('body').html(app.homeView.$el);
     },
 
     category: function () {
-        var x = new app.views.CategoryView();
-        app.slider.slidePage(new app.views.CategoryView().render().$el);
+        $('body').html(new app.views.CategoryView().render().$el);
     },
 
     map: function () {
@@ -39,7 +39,7 @@ app.routers.AppRouter = Backbone.Router.extend({
             console.log('reusing Map view');
             app.mapView.delegateEvents(); // delegate events when the view is recycled
         }
-        app.slider.slidePage(app.mapView.$el);
+        $('body').html(app.mapView.$el);
 
     }
 

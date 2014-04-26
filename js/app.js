@@ -16,7 +16,7 @@ $(document).on("ready", function () {
         function () {
             app.router = new app.routers.AppRouter();
             Backbone.history.start();
-            app.router.navigate('home', {trigger : true});
+            //app.router.navigate('home', {trigger : true});
         }
     );
     app.GeoWatcher.watch();

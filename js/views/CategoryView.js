@@ -10,7 +10,7 @@ app.views.CategoryView = Backbone.View.extend({
 
         'click li a' : function(e) {
             app.models.newReport.set({description : e.currentTarget.innerText});
-            app.router.navigate('home', {trigger : true});
+            //app.router.navigate('#/', {trigger : true});
             console.log(app.models.newReport);
             /*
             var r =  new app.models.Report( { 'name' : 'new model' } ) ;
@@ -20,6 +20,7 @@ app.views.CategoryView = Backbone.View.extend({
                 'name' : 'stelios'
             });
             */
+            //e.preventDefault();
         }
     },
 
