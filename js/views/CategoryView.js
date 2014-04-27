@@ -9,7 +9,7 @@ app.views.CategoryView = Backbone.View.extend({
         "click .btn-back": "back",
 
         'click li a' : function(e) {
-            app.models.newReport.set({description : e.currentTarget.innerText});
+            app.models.newReport.set({category : e.currentTarget.innerText});
             //app.router.navigate('#/', {trigger : true});
             console.log(app.models.newReport);
             /*

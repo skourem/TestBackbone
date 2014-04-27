@@ -12,7 +12,7 @@ var app = {
 
 $(document).on("ready", function () {
     //load .html templates of views
-    app.utils.templates.load(["HomeView", "CategoryView", "MapView"],
+    app.utils.templates.load(["HomeView", "CategoryView", "MapView", "DescriptionView"],
         function () {
             app.router = new app.routers.AppRouter();
             Backbone.history.start();

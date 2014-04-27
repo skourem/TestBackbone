@@ -3,7 +3,8 @@ app.routers.AppRouter = Backbone.Router.extend({
     routes: {
         "":                         "home",
         "category":                 "category",
-        "map":                      "map" 
+        "map":                      "map",
+        "description":               "description" 
     },
 
     initialize: function () {
@@ -27,7 +28,16 @@ app.routers.AppRouter = Backbone.Router.extend({
     },
 
     category: function () {
-        $('body').html(new app.views.CategoryView().render().$el);
+        if (!app.categoryView) {
+            app.categoryView = new app.views.CategoryView();
+            app.categoryView.render();
+        } else {
+            console.log('reusing Category view');
+            app.categoryView.delegateEvents(); // delegate events when the view is recycled
+        }
+        //app.slider.slidePage(app.categoryView.$el);
+        $('body').html(app.categoryView.$el);
+        //$('body').html(new app.views.CategoryView().render().$el);
         //app.slider.slidePage(new app.views.CategoryView().render().$el);
     },
 
@@ -42,6 +52,18 @@ app.routers.AppRouter = Backbone.Router.extend({
         //app.slider.slidePage(app.mapView.$el);
         $('body').html(app.mapView.$el);
 
-    }
+    },
+
+    description: function () {
+        if (!app.descriptionView) {
+            app.descriptionView = new app.views.DescriptionView();
+            app.descriptionView.render();
+        } else {
+            console.log('reusing Description view');
+            app.descriptionView.delegateEvents(); // delegate events when the view is recycled
+        }
+        //app.slider.slidePage(app.descriptionView.$el);
+        $('body').html(app.descriptionView.$el);
+    },
 
 });
