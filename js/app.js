@@ -19,7 +19,12 @@ $(document).on("ready", function () {
             //app.router.navigate('home', {trigger : true});
         }
     );
-    app.GeoWatcher.watch();
+
+    app.fireGPS(function(position){
+        console.log(position.coords);
+        app.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+        app.models.newReport.set({position:app.latlng});
+    });
 });
 
 
