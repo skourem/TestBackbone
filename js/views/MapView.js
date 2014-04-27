@@ -41,6 +41,12 @@ app.views.MapView = Backbone.View.extend({
         var myButton = new L.Control.Button(myButtonOptions).addTo(app.map);
 
 
+        var marker = L.marker([0, 0]).addTo(app.map);
+        app.map.on('move', function () {
+            marker.setLatLng(app.map.getCenter());
+        });
+
+
 
         app.marker = new L.Marker(center, {draggable: true});
         app.marker.addTo(app.map);            
