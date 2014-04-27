@@ -5,21 +5,21 @@ var app = {
     utils: {},
     adapters: {},
     mapquest_key: 'Fmjtd%7Cluur2q682h%2C82%3Do5-9a2sl0',
-    map: {},
-    marker: {},
-    GeoWatcher: {}
+    map: {}, 
+    marker: {}
 };
 
 
 $(document).on("ready", function () {
+    //load .html templates of views
     app.utils.templates.load(["HomeView", "CategoryView", "MapView"],
         function () {
             app.router = new app.routers.AppRouter();
             Backbone.history.start();
-            //app.router.navigate('home', {trigger : true});
         }
     );
 
+    //fire device's GPS and then set current Report model's position for DOM changes
     app.fireGPS(function(position){
         console.log(position.coords);
         app.latlng = L.latLng(position.coords.latitude, position.coords.longitude);

@@ -28,10 +28,10 @@ app.routers.AppRouter = Backbone.Router.extend({
 
     category: function () {
         $('body').html(new app.views.CategoryView().render().$el);
+        //app.slider.slidePage(new app.views.CategoryView().render().$el);
     },
 
     map: function () {
-        //app.slider.slidePage(new app.views.MapView().render().$el);
         if (!app.mapView) {
             app.mapView = new app.views.MapView();
             app.mapView.render();
@@ -39,6 +39,7 @@ app.routers.AppRouter = Backbone.Router.extend({
             console.log('reusing Map view');
             app.mapView.delegateEvents(); // delegate events when the view is recycled
         }
+        //app.slider.slidePage(app.mapView.$el);
         $('body').html(app.mapView.$el);
 
     }

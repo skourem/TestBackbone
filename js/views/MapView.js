@@ -4,6 +4,12 @@ app.views.MapView = Backbone.View.extend({
         this.listenTo(app.models.newReport, 'change:position', this.renderMap);
     },
 
+    events: {
+        "click .btn-back" : "back",
+        "click #gps" : "fireGPS",
+        "submit" : "searchLocation"
+    },
+
     render: function () {
         this.$el.html(this.template());
         var self = this;
@@ -42,23 +48,12 @@ app.views.MapView = Backbone.View.extend({
         }    
     },
 
-    events: {
-        "click .btn-back" : "back",
-        "click #gps" : "fireGPS",
-        "submit" : "searchLocation"
-    },
-
     fireGPS : function() {
         app.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
             app.models.newReport.set({position:latlng});
         });
-    },
-
-    back: function() {
-        window.history.back();
-        return false;
     },
 
     searchLocation: function() {
@@ -113,5 +108,9 @@ app.views.MapView = Backbone.View.extend({
         return false;
     },
 
+    back: function() {
+        window.history.back();
+        return false;
+    }
 
 });

@@ -10,10 +10,10 @@ app.views.HomeView = Backbone.View.extend({
     },
 
     renderDescription : function() {
-        this.$('#description').text(app.models.newReport.attributes.description);
+        this.$('#description').html('<span style="color:#bbb;">Τι; </span>'+app.models.newReport.attributes.description);
     },
 
     renderPosition : function() {
-        this.$('#position').text(app.models.newReport.attributes.position);
+        this.$('#position').html('<span style="color:#bbb;">Που; </span>'+app.models.newReport.attributes.position);
     }
 });
