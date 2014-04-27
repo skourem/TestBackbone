@@ -14,7 +14,6 @@ app.routers.AppRouter = Backbone.Router.extend({
     },
 
     home: function () {
-        // Since the home view never changes, we instantiate it and render it only once
         if (!app.homeView) {
             app.homeView = new app.views.HomeView();
             app.homeView.render();
@@ -23,11 +22,12 @@ app.routers.AppRouter = Backbone.Router.extend({
             app.homeView.delegateEvents(); // delegate events when the view is recycled
         }
         
-        //app.slider.slidePage(app.homeView.$el);
-        $('body').html(app.homeView.$el);
+        //$('body').html(app.homeView.$el);
+        app.slider.slidePage(app.homeView.$el);
     },
 
     category: function () {
+        
         if (!app.categoryView) {
             app.categoryView = new app.views.CategoryView();
             app.categoryView.render();
@@ -35,8 +35,8 @@ app.routers.AppRouter = Backbone.Router.extend({
             console.log('reusing Category view');
             app.categoryView.delegateEvents(); // delegate events when the view is recycled
         }
-        //app.slider.slidePage(app.categoryView.$el);
-        $('body').html(app.categoryView.$el);
+        app.slider.slidePage(app.categoryView.$el);
+        //$('body').html(app.categoryView.$el);
         //$('body').html(new app.views.CategoryView().render().$el);
         //app.slider.slidePage(new app.views.CategoryView().render().$el);
     },
@@ -49,8 +49,8 @@ app.routers.AppRouter = Backbone.Router.extend({
             console.log('reusing Map view');
             app.mapView.delegateEvents(); // delegate events when the view is recycled
         }
-        //app.slider.slidePage(app.mapView.$el);
-        $('body').html(app.mapView.$el);
+        app.slider.slidePage(app.mapView.$el);
+        //$('body').html(app.mapView.$el);
 
     },
 
@@ -62,8 +62,8 @@ app.routers.AppRouter = Backbone.Router.extend({
             console.log('reusing Description view');
             app.descriptionView.delegateEvents(); // delegate events when the view is recycled
         }
-        //app.slider.slidePage(app.descriptionView.$el);
-        $('body').html(app.descriptionView.$el);
+        app.slider.slidePage(app.descriptionView.$el);
+        //$('body').html(app.descriptionView.$el);
     },
 
 });

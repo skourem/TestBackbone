@@ -20,11 +20,13 @@ $(document).on("ready", function () {
     );
 
     //fire device's GPS and then set current Report model's position for DOM changes
+    
     app.fireGPS(function(position){
         console.log(position.coords);
         app.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
         app.models.newReport.set({position:app.latlng});
     });
+    
 });
 
 

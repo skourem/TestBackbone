@@ -28,6 +28,20 @@ app.views.MapView = Backbone.View.extend({
             zoom: zoom
         });
         
+        var myButtonOptions = {
+          'text': '',  // string
+          'iconUrl': 'images/gps_arrow.png',  // string
+          'onClick': self.fireGPS,  // callback function
+          'hideText': false,  // bool
+          'maxWidth': 32,  // number
+          'doToggle': false,  // bool
+          'toggleStatus': false  // bool
+        }   
+
+        var myButton = new L.Control.Button(myButtonOptions).addTo(app.map);
+
+
+
         app.marker = new L.Marker(center, {draggable: true});
         app.marker.addTo(app.map);            
         app.marker.on('dragend', function() {

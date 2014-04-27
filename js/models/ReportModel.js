@@ -1,10 +1,8 @@
 app.models.Report = Backbone.Model.extend({
-	toggle : function(){
-		this.save();
-	}
+	
 });
 
-
+/*
 app.models.ReportList = Backbone.Collection.extend({
 	
 	model: app.models.Report,
@@ -12,5 +10,5 @@ app.models.ReportList = Backbone.Collection.extend({
     localStorage: new Backbone.LocalStorage("SmartCitizen_Reports")
 
 });
-
+*/
 //var Reports = new app.models.ReportList;
