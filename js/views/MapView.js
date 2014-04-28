@@ -8,7 +8,7 @@ app.views.MapView = Backbone.View.extend({
     events: {
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
-        "submit" : "searchAddress"
+        "submit #address_form" : "searchAddress"
     },
 
     render: function () {
@@ -22,7 +22,8 @@ app.views.MapView = Backbone.View.extend({
     },
 
     renderAddress: function () {
-       this.$('#address').val(app.models.newReport.get('position.address'));
+       //this.$('#address').val(app.models.newReport.get('position.address'));
+       app.marker.bindPopup(app.models.newReport.get('position.address')).openPopup();
     },
 
     initMap : function(center, zoom) {
@@ -44,17 +45,18 @@ app.views.MapView = Backbone.View.extend({
             app.marker.setLatLng(app.map.getCenter());
         });
         app.map.on('moveend', function() {
-            self.searchLatLng(app.marker.getLatLng());
+            self.searchLatLngGeoFarm(app.marker.getLatLng());
         });
-        /*
-        var myControl = L.control({position: 'bottomright'});
+        
+        var myControl = L.control({position: 'topleft'});
         myControl.onAdd = function(map) {
             this._div = L.DomUtil.create('div', 'myControl');
-            this._div.innerHTML = '<input type="text" placeholder="Αριθμός"/>';
+            this._div.innerHTML = '<form id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="45"  type="text" placeholder="Αναζήτηση..."/></form>';
             return this._div;
         }
         myControl.addTo(app.map);
-        */
+
+    
         /*
         app.marker = new L.Marker(center, {draggable: true});
         app.marker.addTo(app.map);            
@@ -125,21 +127,25 @@ app.views.MapView = Backbone.View.extend({
         
         return false;
     },
-    /*
-    searchLocationGeoFarm: function() {
+    
+    searchLatLngGeoFarm: function(latlng) {
         var geofarm_url = [], j = -1;
-        geofarm_url[++j] = 'http://www.geocodefarm.com/api/forward/json/1a4798868ea9076fd89f6a46158e747032a85529/';
-        geofarm_url[++j] = this.$('#location').val();
-        geofarm_url[++j] = ' GR';
-        
+        geofarm_url[++j] = 'http://www.geocodefarm.com/api/reverse/json/1a4798868ea9076fd89f6a46158e747032a85529/';
+        //geofarm_url[++j] = this.$('#location').val();
+        //geofarm_url[++j] = ' GR';
+        geofarm_url[++j] = latlng.lat;
+        geofarm_url[++j] = '/';
+        geofarm_url[++j] = latlng.lng;
+        geofarm_url[++j] = '/';
+
         console.log(geofarm_url.join(''));
         $.get(geofarm_url.join(''), function(data){
-            console.log(data);
+            console.log(data.geocoding_results.ADDRESS);
         });
         
         return false;
     },
-    */
+    
     back: function() {
         window.history.back();
         return false;
