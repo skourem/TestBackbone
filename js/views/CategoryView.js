@@ -8,9 +8,9 @@ app.views.CategoryView = Backbone.View.extend({
     events : {
         "click .btn-back": "back",
 
-        'click li a' : function(e) {
+        "click .push-right" : function(e) {
             app.models.newReport.set({category : e.currentTarget.innerText});
-            //app.router.navigate('#/', {trigger : true});
+            //app.router.navigate('#', {trigger : true});
             console.log(app.models.newReport);
             /*
             var r =  new app.models.Report( { 'name' : 'new model' } ) ;

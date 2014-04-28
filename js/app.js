@@ -14,6 +14,7 @@ $(document).on("ready", function () {
     //load .html templates of views
     app.utils.templates.load(["HomeView", "CategoryView", "MapView", "DescriptionView"],
         function () {
+            //FastClick.attach(document.body);
             app.router = new app.routers.AppRouter();
             Backbone.history.start();
         }
