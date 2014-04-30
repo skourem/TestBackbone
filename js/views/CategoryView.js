@@ -1,4 +1,4 @@
-app.views.CategoryView = Backbone.View.extend({
+SC.Views.CategoryView = Backbone.View.extend({
     
     render: function () {
         this.$el.html(this.template());
@@ -9,8 +9,8 @@ app.views.CategoryView = Backbone.View.extend({
         "click .btn-back": "back",
 
         "click .push-right" : function(e) {
-            app.models.newReport.set({category : e.currentTarget.innerText});
-            console.log(app.models.newReport);
+            this.model.set({category : e.currentTarget.innerText});
+            console.log(SC.Models.newReport);
         }
     },
 
@@ -18,6 +18,5 @@ app.views.CategoryView = Backbone.View.extend({
         window.history.back();
         return false;
     }
-
 
 });

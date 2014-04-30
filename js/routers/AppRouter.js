@@ -1,69 +1,73 @@
-app.routers.AppRouter = Backbone.Router.extend({
+SC.Routers.AppRouter = Backbone.Router.extend({
 
     routes: {
-        "":                         "home",
-        "category":                 "category",
-        "map":                      "map",
-        "description":               "description" 
+        ""                   : "home",
+        "category"           : "category",
+        "map"                : "map",
+        "description"        : "description" 
     },
 
     initialize: function () {
-        app.slider = new PageSlider($('body'));
-        app.models.newReport = new app.models.Report();
+        SC.slider = new PageSlider($('body'));
+        // create a report instance to be shared among Views
+        SC.Models.reportInstance = new SC.Models.Report();
+
+        //fire device's GPS and then set current Report model's position for DOM changes
+        SC.fireGPS(function(position){
+            console.log(position.coords);
+            SC.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+            SC.Models.reportInstance.set({position : SC.latlng});
+        });
         //Reports.fetch();
     },
 
     home: function () {
-        if (!app.homeView) {
-            app.homeView = new app.views.HomeView();
-            app.homeView.render();
+        if (!SC.homeView) {
+            SC.homeView = new SC.Views.HomeView({model : SC.Models.reportInstance});
+            SC.homeView.render();
         } else {
             console.log('reusing home view');
-            app.homeView.delegateEvents(); // delegate events when the view is recycled
+            SC.homeView.delegateEvents(); // delegate events when the view is recycled
         }
-        
-        //$('body').html(app.homeView.$el);
-        app.slider.slidePage(app.homeView.$el);
+        //$('body').html(SC.homeView.$el);
+        SC.slider.slidePage(SC.homeView.$el);
     },
 
     category: function () {
         
-        if (!app.categoryView) {
-            app.categoryView = new app.views.CategoryView();
-            app.categoryView.render();
+        if (!SC.categoryView) {
+            SC.categoryView = new SC.Views.CategoryView({model : SC.Models.reportInstance});
+            SC.categoryView.render();
         } else {
             console.log('reusing Category view');
-            app.categoryView.delegateEvents(); // delegate events when the view is recycled
+            SC.categoryView.delegateEvents(); // delegate events when the view is recycled
         }
-        app.slider.slidePage(app.categoryView.$el);
-        //$('body').html(app.categoryView.$el);
-        //$('body').html(new app.views.CategoryView().render().$el);
-        //app.slider.slidePage(new app.views.CategoryView().render().$el);
+        SC.slider.slidePage(SC.categoryView.$el);
+        //$('body').html(SC.categoryView.$el);
     },
 
     map: function () {
-        if (!app.mapView) {
-            app.mapView = new app.views.MapView();
-            app.mapView.render();
+        if (!SC.mapView) {
+            SC.mapView = new SC.Views.MapView({model : SC.Models.reportInstance});
+            SC.mapView.render();
         } else {
             console.log('reusing Map view');
-            app.mapView.delegateEvents(); // delegate events when the view is recycled
+            SC.mapView.delegateEvents(); // delegate events when the view is recycled
         }
-        app.slider.slidePage(app.mapView.$el);
-        //$('body').html(app.mapView.$el);
+        SC.slider.slidePage(SC.mapView.$el);
+        //$('body').html(SC.mapView.$el);
 
     },
 
     description: function () {
-        if (!app.descriptionView) {
-            app.descriptionView = new app.views.DescriptionView();
-            app.descriptionView.render();
+        if (!SC.descriptionView) {
+            SC.descriptionView = new SC.Views.DescriptionView({model : SC.Models.reportInstance});
+            SC.descriptionView.render();
         } else {
             console.log('reusing Description view');
-            app.descriptionView.delegateEvents(); // delegate events when the view is recycled
+            SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
         }
-        app.slider.slidePage(app.descriptionView.$el);
-        //$('body').html(app.descriptionView.$el);
-    },
-
+        SC.slider.slidePage(SC.descriptionView.$el);
+        //$('body').html(SC.descriptionView.$el);
+    }
 });

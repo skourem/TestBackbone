@@ -1,14 +1,14 @@
-app.models.Report = Backbone.Model.extend({
+SC.Models.Report = Backbone.Model.extend({
 	
 });
 
 
-app.models.ReportList = Backbone.Collection.extend({
+SC.Models.ReportList = Backbone.Collection.extend({
 	
-	model: app.models.Report,
+	model: SC.Models.Report,
 
     localStorage: new Backbone.LocalStorage("SmartCitizen_Reports")
 
 });
 
-var Reports = new app.models.ReportList;
+var Reports = new SC.Models.ReportList;

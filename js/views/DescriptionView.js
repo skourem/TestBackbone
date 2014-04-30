@@ -1,4 +1,4 @@
-app.views.DescriptionView = Backbone.View.extend({
+SC.Views.DescriptionView = Backbone.View.extend({
     
     render: function () {
         this.$el.html(this.template());
@@ -11,9 +11,9 @@ app.views.DescriptionView = Backbone.View.extend({
     },
 
     saveNewReport : function() {
-        app.models.newReport.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
-        Reports.add( app.models.newReport );
-        app.models.newReport.save();
+        this.model.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
+        Reports.add( this.model );
+        this.model.save();
         console.log('saved');
     },
 

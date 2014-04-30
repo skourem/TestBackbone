@@ -1,13 +1,13 @@
-app.utils.templates = (function() {
+SC.Utils.templates = (function() {
 
     var load = function(views, callback) {
 
         var deferreds = [];
 
         $.each(views, function(index, view) {
-            if (app.views[view]) {
+            if (SC.Views[view]) {
                 deferreds.push($.get('tpl/' + view + '.html', function(data) {
-                    app.views[view].prototype.template = _.template(data);
+                    SC.Views[view].prototype.template = _.template(data);
                 }, 'html'));
             } else {
                 alert(view + " not found");

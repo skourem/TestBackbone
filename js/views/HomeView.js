@@ -1,8 +1,8 @@
-app.views.HomeView = Backbone.View.extend({
+SC.Views.HomeView = Backbone.View.extend({
 
     initialize: function () {
-        this.listenTo(app.models.newReport, 'change:category', this.renderCategory);
-        this.listenTo(app.models.newReport, 'change:position.address', this.renderAddress);
+        this.listenTo(this.model, 'change:category', this.renderCategory);
+        this.listenTo(this.model, 'change:position.address', this.renderAddress);
     },
 
     render: function () {
@@ -11,12 +11,12 @@ app.views.HomeView = Backbone.View.extend({
 
     renderCategory : function() {
         this.$('#category').html( '<span style="color:#bbb;">Τι; </span>'+
-            app.models.newReport.get('category') );
+            this.model.get('category') );
     },
 
     renderAddress : function() {
         this.$('#position').html( '<span style="color:#bbb;">Που; </span>'+
-            app.models.newReport.get('position.address') );
+            this.model.get('position.address') );
     },
 
     events : {
@@ -24,6 +24,6 @@ app.views.HomeView = Backbone.View.extend({
     },
 
     navigateDescription : function() {
-        app.router.navigate('description', {trigger: true});
+        SC.router.navigate('description', {trigger: true});
     }
 });
