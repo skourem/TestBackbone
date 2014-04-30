@@ -2,7 +2,7 @@ SC.Views.HomeView = Backbone.View.extend({
 
     initialize: function () {
         this.listenTo(this.model, 'change:category', this.renderCategory);
-        this.listenTo(this.model, 'change:position.address', this.renderAddress);
+        this.listenTo(this.model, 'change:address', this.renderAddress);
     },
 
     render: function () {
@@ -16,7 +16,7 @@ SC.Views.HomeView = Backbone.View.extend({
 
     renderAddress : function() {
         this.$('#position').html( '<span style="color:#bbb;">Που; </span>'+
-            this.model.get('position.address') );
+            this.model.get('address') );
     },
 
     events : {

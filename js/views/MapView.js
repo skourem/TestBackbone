@@ -1,8 +1,8 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        this.listenTo(this.model, 'change:position.address', this.renderAddress);
-        this.listenTo(this.model, 'change:position.latlng', this.renderMap);
+        this.listenTo(this.model, 'change:address', this.renderAddress);
+        this.listenTo(this.model, 'change:latlng', this.renderMap);
     },
 
     events: {
@@ -22,7 +22,7 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     renderAddress: function () {
-       SC.marker.bindPopup(this.model.get('position.address')).openPopup();
+       SC.marker.bindPopup(this.model.get('address')).openPopup();
     },
 
     initMap : function(center, zoom) {
@@ -62,7 +62,7 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     renderMap : function() {
-        var displayLatlng = this.model.get('position.latlng');
+        var displayLatlng = this.model.get('latlng');
         if (_.isEmpty(SC.map)) {
             this.initMap(displayLatlng, 22);
         }
@@ -76,7 +76,8 @@ SC.Views.MapView = Backbone.View.extend({
         SC.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-            self.model.set({ 'position.latlng' : latlng });
+            self.model.set({ 'latlng' : latlng });
+            console.log(self.model);
         });
     },
 
@@ -92,10 +93,8 @@ SC.Views.MapView = Backbone.View.extend({
         $.get(mapquest_url.join(''), function(data){
             console.log(data);
             var location = data.results[0].locations[0];
-            self.model.set({ 'position.latlng' : location.displayLatLng });
-            self.model.set({ 
-                'position.address' : [location.street,location.adminArea5,location.postalCode].join(', ')
-            });
+            self.model.set({ 'latlng' : location.displayLatLng });
+            self.model.set({'address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
         });
         
         return false;
@@ -114,9 +113,7 @@ SC.Views.MapView = Backbone.View.extend({
         $.get(mapquest_url.join(''), function(data){
             console.log(data);
             var location = data.results[0].locations[0];
-            self.model.set({ 
-                'position.address' : [location.street,location.adminArea5,location.postalCode].join(', ')
-            });
+            self.model.set({'address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
         });
         
         return false;

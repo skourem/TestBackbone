@@ -16,7 +16,7 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         SC.fireGPS(function(position){
             console.log(position.coords);
             SC.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-            SC.Models.reportInstance.set({position : SC.latlng});
+            SC.Models.reportInstance.set({'latlng' : SC.latlng});
         });
         //Reports.fetch();
     },
