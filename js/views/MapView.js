@@ -34,10 +34,6 @@ SC.Views.MapView = Backbone.View.extend({
             zoomControl: false
         });
         
-        var myButtonOptions = {'text': '','iconUrl': 'images/gps_arrow.png','onClick': self.fireGPS,  
-          'hideText': false, 'maxWidth': 32,'doToggle': false,'toggleStatus': false}   
-        var myButton = new L.Control.Button(myButtonOptions).addTo(SC.map);
-    
         SC.marker = L.circleMarker(center, {radius: 10}).addTo(SC.map);
         SC.map.on('move', function () {
             SC.marker.setLatLng(SC.map.getCenter());
@@ -46,13 +42,23 @@ SC.Views.MapView = Backbone.View.extend({
             self.searchLatLngGeoFarm(SC.marker.getLatLng());
         });
         
-        var myControl = L.control({position: 'topleft'});
-        myControl.onAdd = function(map) {
-            this._div = L.DomUtil.create('div', 'myControl');
-            this._div.innerHTML = '<form id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="45"  type="text" placeholder="Αναζήτηση..."/></form>';
+        var gpsArrowControl = L.control({position: 'bottomleft'}),
+            searchAddress_Control = L.control({position: 'topleft'});;
+
+        gpsArrowControl.onAdd = function() {
+            this._div = L.DomUtil.create('div', 'gpsArrowControl');
+            this._div.innerHTML = '<img id="gps" src="images/gps_arrow.png"/>';
             return this._div;
-        }
-        myControl.addTo(SC.map);
+        };
+        searchAddress_Control.onAdd = function() {
+            this._div = L.DomUtil.create('div', 'searchAddress_Control');
+            this._div.innerHTML = 
+                '<form type="submit" id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="45"  type="text" placeholder="Αναζήτηση..."/></form>';
+            return this._div;
+        };
+        gpsArrowControl.addTo(SC.map);
+        searchAddress_Control.addTo(SC.map);
+        
     },
 
     renderMap : function() {
@@ -67,7 +73,7 @@ SC.Views.MapView = Backbone.View.extend({
 
     fireGPS : function() {
         var self = this;
-        app.fireGPS(function(position){
+        SC.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
             self.model.set({ 'position.latlng' : latlng });

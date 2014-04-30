@@ -34,7 +34,6 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     },
 
     category: function () {
-        
         if (!SC.categoryView) {
             SC.categoryView = new SC.Views.CategoryView({model : SC.Models.reportInstance});
             SC.categoryView.render();
