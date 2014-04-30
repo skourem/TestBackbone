@@ -8,7 +8,8 @@ SC.Views.MapView = Backbone.View.extend({
     events: {
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
-        "submit #address_form" : "searchAddress"
+        "submit #address_form" : "searchAddressGeoFarm",
+        "click #done" : "navigateHome"
     },
 
     render: function () {
@@ -23,6 +24,12 @@ SC.Views.MapView = Backbone.View.extend({
 
     renderAddress: function () {
        SC.marker.bindPopup(this.model.get('address')).openPopup();
+       // show 'done' button only when address is found
+       if ( !this.model.previous('address') ) this.$('#done').show();
+    },
+
+    navigateHome: function () {
+        SC.router.navigate('#', {trigger: true});
     },
 
     initMap : function(center, zoom) {
@@ -31,7 +38,11 @@ SC.Views.MapView = Backbone.View.extend({
             layers: MQ.mapLayer(),
             center: center,
             zoom: zoom,
-            zoomControl: false
+            zoomControl: false,
+            touchZoom: true,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            boxZoom: false
         });
         
         SC.marker = L.circleMarker(center, {radius: 10}).addTo(SC.map);
@@ -53,7 +64,7 @@ SC.Views.MapView = Backbone.View.extend({
         searchAddress_Control.onAdd = function() {
             this._div = L.DomUtil.create('div', 'searchAddress_Control');
             this._div.innerHTML = 
-                '<form type="submit" id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="45"  type="text" placeholder="Αναζήτηση..."/></form>';
+                '<form type="submit" id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="29"  type="text" placeholder="Αναζήτηση..."/></form>';
             return this._div;
         };
         gpsArrowControl.addTo(SC.map);
@@ -119,8 +130,26 @@ SC.Views.MapView = Backbone.View.extend({
         return false;
     },
     
+    searchAddressGeoFarm: function() {
+        var geofarm_url = [], j = -1, self = this;
+        geofarm_url[++j] = 'http://www.geocodefarm.com/api/forward/json/1a4798868ea9076fd89f6a46158e747032a85529/';
+        geofarm_url[++j] = this.$('#address').val();
+        geofarm_url[++j] = '/';
+
+        console.log(geofarm_url.join(''));
+        $.get(geofarm_url.join(''), function(data){
+            console.log(data.geocoding_results);
+            var COORDINATES = data.geocoding_results.COORDINATES;
+            var latlng = {'lat' : COORDINATES.latitude, 'lng' : COORDINATES.longitude};
+            self.model.set({ 'latlng' :  latlng });
+            self.model.set({'address' : data.geocoding_results.ADDRESS.address_returned });
+        });
+        
+        return false;
+    },
+
     searchLatLngGeoFarm: function(latlng) {
-        var geofarm_url = [], j = -1;
+        var geofarm_url = [], j = -1, self = this;
         geofarm_url[++j] = 'http://www.geocodefarm.com/api/reverse/json/1a4798868ea9076fd89f6a46158e747032a85529/';
         geofarm_url[++j] = latlng.lat;
         geofarm_url[++j] = '/';
@@ -130,6 +159,7 @@ SC.Views.MapView = Backbone.View.extend({
         console.log(geofarm_url.join(''));
         $.get(geofarm_url.join(''), function(data){
             console.log(data.geocoding_results.ADDRESS);
+            self.model.set({'address' : data.geocoding_results.ADDRESS.address} );
         });
         
         return false;

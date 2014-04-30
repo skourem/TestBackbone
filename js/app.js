@@ -12,8 +12,8 @@ var SC = {
 
 
 $(function () {
-   
-    if (navigator.platform === 'Win32') onDeviceReady();
+    console.log(navigator.platform);
+    if ( _.contains(['Win32','MacIntel'], navigator.platform) ) onDeviceReady();
     else document.addEventListener("deviceready", onDeviceReady, false);
 
     function onDeviceReady() {
