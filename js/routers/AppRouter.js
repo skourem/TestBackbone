@@ -16,7 +16,9 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         SC.fireGPS(function(position){
             console.log(position.coords);
             SC.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-            SC.Models.reportInstance.set({'latlng' : SC.latlng});
+            if ( !SC.Models.reportInstance.get('latlng') ) {
+                SC.Models.reportInstance.set({'latlng' : SC.latlng});
+            }
         });
         //Reports.fetch();
     },
@@ -25,6 +27,13 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         if (!SC.homeView) {
             SC.homeView = new SC.Views.HomeView({model : SC.Models.reportInstance});
             SC.homeView.render();
+
+            SC.categoryView = new SC.Views.CategoryView({model : SC.Models.reportInstance});
+            SC.categoryView.render();
+
+            //SC.mapView = new SC.Views.MapView({model : SC.Models.reportInstance});
+            //SC.mapView.render();
+
         } else {
             console.log('reusing home view');
             SC.homeView.delegateEvents(); // delegate events when the view is recycled

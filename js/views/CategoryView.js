@@ -10,7 +10,6 @@ SC.Views.CategoryView = Backbone.View.extend({
 
         "click .push-right" : function(e) {
             this.model.set({category : e.currentTarget.innerText});
-            console.log(SC.Models.newReport);
         }
     },
 

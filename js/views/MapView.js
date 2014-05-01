@@ -1,7 +1,7 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        this.listenTo(this.model, 'change:address', this.renderAddress);
+        this.listenTo(this.model, 'change:popup_address', this.renderPopUpAddress);
         this.listenTo(this.model, 'change:latlng', this.renderMap);
     },
 
@@ -9,27 +9,42 @@ SC.Views.MapView = Backbone.View.extend({
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
         "submit #address_form" : "searchAddressBing",
-        "click #done" : "navigateHome"
+        "click #done" : "done"
     },
 
     render: function () {
         this.$el.html(this.template());
         var self = this;
         setTimeout(function(){
-            if (SC.latlng) self.initMap(SC.latlng, 18); 
-        },100);
+            if (SC.latlng) self.initMap(SC.latlng, 16);
+            // initMap in Greece 
+            else self.initMap(L.latLng(39,22), 7); 
+        });
         
         return this;
     },
 
-    renderAddress: function () {
-       //SC.marker.bindPopup(this.model.get('address')).openPopup();
-       this.$('#address').val(this.model.get('address'));
+    renderPopUpAddress: function () {
+       SC.marker.bindPopup(this.model.get('popup_address'), {maxWidth: 150}).openPopup();
+       //this.$('#address').val(this.model.get('address'));
        // show 'done' button only when address is found
-       if ( !this.model.previous('address') ) this.$('#done').show();
+       if ( !this.model.previous('popup_address') ) this.$('#done').show();
     },
 
-    navigateHome: function () {
+    renderMap : function() {
+        var displayLatlng = this.model.get('latlng');
+        if (_.isEmpty(SC.map)) {
+            this.initMap(displayLatlng, 16);
+        }
+        else {
+            if ( !this.model.previous('latlng') ) SC.map.setZoom(16);
+            SC.map.setView(displayLatlng);
+        }    
+    },
+
+    done: function () {
+        var popup_address = this.model.get('popup_address');
+        this.model.set({'address' : popup_address});
         SC.router.navigate('#', {trigger: true});
     },
 
@@ -74,16 +89,7 @@ SC.Views.MapView = Backbone.View.extend({
         gpsArrowControl.addTo(SC.map);
         searchAddress_Control.addTo(SC.map);
         
-    },
-
-    renderMap : function() {
-        var displayLatlng = this.model.get('latlng');
-        if (_.isEmpty(SC.map)) {
-            this.initMap(displayLatlng, 22);
-        }
-        else {
-            SC.map.setView(displayLatlng);
-        }    
+        this.$('#gps').css('margin-bottom', '20px');
     },
 
     fireGPS : function() {
@@ -109,7 +115,7 @@ SC.Views.MapView = Backbone.View.extend({
             console.log(data);
             var location = data.results[0].locations[0];
             self.model.set({ 'latlng' : location.displayLatLng });
-            self.model.set({'address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
+            self.model.set({'popup_address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
         });
         
         return false;
@@ -128,7 +134,7 @@ SC.Views.MapView = Backbone.View.extend({
         $.get(mapquest_url.join(''), function(data){
             console.log(data);
             var location = data.results[0].locations[0];
-            self.model.set({'address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
+            self.model.set({'popup_address' : [location.street,location.adminArea5,location.postalCode].join(', ') });
         });
         
         return false;
@@ -146,7 +152,7 @@ SC.Views.MapView = Backbone.View.extend({
             var COORDINATES = data.geocoding_results.COORDINATES;
             var latlng = {'lat' : COORDINATES.latitude, 'lng' : COORDINATES.longitude};
             self.model.set({ 'latlng' :  latlng });
-            self.model.set({'address' : data.geocoding_results.ADDRESS.address_returned });
+            self.model.set({'popup_address' : data.geocoding_results.ADDRESS.address_returned });
         });
         
         return false;
@@ -163,7 +169,7 @@ SC.Views.MapView = Backbone.View.extend({
         console.log(geofarm_url.join(''));
         $.get(geofarm_url.join(''), function(data){
             console.log(data.geocoding_results.ADDRESS);
-            self.model.set({'address' : data.geocoding_results.ADDRESS.address} );
+            self.model.set({'popup_address' : data.geocoding_results.ADDRESS.address} );
         });
         
         return false;
@@ -182,7 +188,7 @@ SC.Views.MapView = Backbone.View.extend({
             var resources = data.resourceSets[0].resources[0];
             var latlng = {'lat' : resources.point.coordinates[0], 'lng' : resources.point.coordinates[1]};
             self.model.set({ 'latlng' :  latlng });
-            self.model.set({'address' : resources.name.replace(', Ελληνική Δημοκρατία', '')});
+            self.model.set({'popup_address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
         });
         
         return false;
@@ -201,7 +207,7 @@ SC.Views.MapView = Backbone.View.extend({
         $.get(bing_url.join(''), function(data){
             console.log(data);
             var resources = data.resourceSets[0].resources[0];
-            self.model.set({'address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
+            self.model.set({'popup_address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
         });
         
         return false;

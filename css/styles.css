@@ -2,6 +2,11 @@ ul {
     clear: both;
 }
 
+.push-check {
+    right: 15px;
+    content: '\e810';
+}
+
 .content {
     position: absolute;
 }
