@@ -8,7 +8,7 @@ SC.Views.MapView = Backbone.View.extend({
     events: {
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
-        "submit #address_form" : "searchAddressGeoFarm",
+        "submit #address_form" : "searchAddressBing",
         "click #done" : "navigateHome"
     },
 
@@ -23,7 +23,8 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     renderAddress: function () {
-       SC.marker.bindPopup(this.model.get('address')).openPopup();
+       //SC.marker.bindPopup(this.model.get('address')).openPopup();
+       this.$('#address').val(this.model.get('address'));
        // show 'done' button only when address is found
        if ( !this.model.previous('address') ) this.$('#done').show();
     },
@@ -35,22 +36,25 @@ SC.Views.MapView = Backbone.View.extend({
     initMap : function(center, zoom) {
         var self = this;
         SC.map = L.map('map', {
-            layers: MQ.mapLayer(),
+            //layers: MQ.mapLayer(),
+            layers: new L.BingLayer(SC.bingmaps_key, {type : 'Road'}),
             center: center,
             zoom: zoom,
             zoomControl: false,
-            touchZoom: true,
+            touchZoom: false,
             scrollWheelZoom: false,
             doubleClickZoom: false,
             boxZoom: false
-        });
-        
+        });     
+
         SC.marker = L.circleMarker(center, {radius: 10}).addTo(SC.map);
         SC.map.on('move', function () {
             SC.marker.setLatLng(SC.map.getCenter());
         });
         SC.map.on('moveend', function() {
-            self.searchLatLngGeoFarm(SC.marker.getLatLng());
+            setTimeout(function() {
+                self.searchLatLngBing(SC.marker.getLatLng());
+            });
         });
         
         var gpsArrowControl = L.control({position: 'bottomleft'}),
@@ -165,6 +169,44 @@ SC.Views.MapView = Backbone.View.extend({
         return false;
     },
     
+    searchAddressBing: function() {
+        var bing_url = [], j = -1, self = this;
+        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations?c=el&q=';
+        bing_url[++j] = this.$('#address').val();
+        bing_url[++j] = '&key=';
+        bing_url[++j] = SC.bingmaps_key;
+
+        console.log(bing_url.join(''));
+        $.get(bing_url.join(''), function(data){
+            console.log(data);
+            var resources = data.resourceSets[0].resources[0];
+            var latlng = {'lat' : resources.point.coordinates[0], 'lng' : resources.point.coordinates[1]};
+            self.model.set({ 'latlng' :  latlng });
+            self.model.set({'address' : resources.name.replace(', Ελληνική Δημοκρατία', '')});
+        });
+        
+        return false;
+    },
+
+    searchLatLngBing: function(latlng) {
+        var bing_url = [], j = -1, self = this;
+        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations/';
+        bing_url[++j] = latlng.lat;
+        bing_url[++j] = ',';
+        bing_url[++j] = latlng.lng;
+        bing_url[++j] = '?c=el&key=';
+        bing_url[++j] = SC.bingmaps_key;
+        
+        console.log(bing_url.join(''));
+        $.get(bing_url.join(''), function(data){
+            console.log(data);
+            var resources = data.resourceSets[0].resources[0];
+            self.model.set({'address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
+        });
+        
+        return false;
+    },
+
     back: function() {
         window.history.back();
         return false;
