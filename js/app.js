@@ -6,6 +6,7 @@ var SC = {
     Adapters: {},
     mapquest_key: 'Fmjtd%7Cluur2q682h%2C82%3Do5-9a2sl0',
     bingmaps_key: 'ArmHwLMBFSxTf1CCrJ2iWLrvU7J-aOnWfRKDA-brBL4RhPxo5J3525whxxKRk-Uw',
+    root: 'http://79.129.63.40:8080/smartcitizen/',
     map: {}, 
     marker: {}
 };

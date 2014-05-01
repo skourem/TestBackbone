@@ -2,9 +2,14 @@ ul {
     clear: both;
 }
 
-.push-check {
-    right: 15px;
-    content: '\e810';
+.half-button {
+    float: left;
+    width: 45%;
+    margin: 1%;
+}
+
+.btn-container {
+    margin-left: 5%;
 }
 
 .content {
