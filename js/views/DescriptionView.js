@@ -1,5 +1,10 @@
 SC.Views.DescriptionView = Backbone.View.extend({
     
+    initialize: function () {
+        this.listenTo(this.model, 'change', this.uncheckSaveBtn);
+        this.listenTo(this.model, 'sync', this.checkSaveBtn);
+    },
+
     render: function () {
         this.$el.html(this.template());
         return this;
@@ -8,17 +13,26 @@ SC.Views.DescriptionView = Backbone.View.extend({
     events : {
         "click #save" : "saveNewReport",
         "click #phone": "callMunicipality",
-        "click .btn-back": "back"
+        "click .btn-back": "back",
+        "keypress #description" : "uncheckSaveBtn"
     },
 
     saveNewReport : function() {
         this.model.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
         Reports.add( this.model );
         this.model.save();
-        console.log('saved');
     },
 
-    callMunicipality : function() {
+    checkSaveBtn : function() {
+        this.$('#save span').show();
+    },
+
+    uncheckSaveBtn : function() {
+        this.$('#save span').hide();
+    },
+
+    callMunicipality : function(e) {
+       
         var postgis_url = [], j = -1, self = this;
         var latlng = this.model.get('latlng');
         postgis_url[++j] = SC.root;
@@ -27,10 +41,13 @@ SC.Views.DescriptionView = Backbone.View.extend({
         postgis_url[++j] = '%20';
         postgis_url[++j] = latlng.lat;
         console.log(postgis_url.join(''));
+        var spinner = new Spinner(SC.spinner_opts).spin();
+        e.target.appendChild(spinner.el);
         $.get(postgis_url.join(''), function(data) {
             console.log(data);
             var municipality = JSON.parse(data);
             console.log(municipality.name);
+            spinner.stop();
         })
     },
 

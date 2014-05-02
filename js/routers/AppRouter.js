@@ -31,8 +31,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
             SC.categoryView = new SC.Views.CategoryView({model : SC.Models.reportInstance});
             SC.categoryView.render();
 
-            //SC.mapView = new SC.Views.MapView({model : SC.Models.reportInstance});
-            //SC.mapView.render();
+            SC.descriptionView = new SC.Views.DescriptionView({model : SC.Models.reportInstance});
+            SC.descriptionView.render();
 
         } else {
             console.log('reusing home view');
@@ -43,13 +43,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     },
 
     category: function () {
-        if (!SC.categoryView) {
-            SC.categoryView = new SC.Views.CategoryView({model : SC.Models.reportInstance});
-            SC.categoryView.render();
-        } else {
-            console.log('reusing Category view');
-            SC.categoryView.delegateEvents(); // delegate events when the view is recycled
-        }
+        console.log('reusing Category view');
+        SC.categoryView.delegateEvents(); // delegate events when the view is recycled
         SC.slider.slidePage(SC.categoryView.$el);
         //$('body').html(SC.categoryView.$el);
     },
@@ -68,13 +63,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     },
 
     description: function () {
-        if (!SC.descriptionView) {
-            SC.descriptionView = new SC.Views.DescriptionView({model : SC.Models.reportInstance});
-            SC.descriptionView.render();
-        } else {
-            console.log('reusing Description view');
-            SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
-        }
+        console.log('reusing Description view');
+        SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
         SC.slider.slidePage(SC.descriptionView.$el);
         //$('body').html(SC.descriptionView.$el);
     }

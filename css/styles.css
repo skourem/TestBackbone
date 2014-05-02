@@ -12,6 +12,28 @@ ul {
     margin-left: 5%;
 }
 
+.checked:after {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  color: #bbb;
+  font-family: Ratchicons;
+  font-size: inherit;
+  text-decoration: none;
+  line-height: 1;
+  cursor: default;
+  -webkit-font-smoothing: antialiased;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.checked:after {
+  right: 15px;
+  content: '\e810';
+}
+
+
 .content {
     position: absolute;
 }
