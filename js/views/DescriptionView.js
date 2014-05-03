@@ -19,7 +19,7 @@ SC.Views.DescriptionView = Backbone.View.extend({
 
     saveNewReport : function() {
         this.model.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
-        Reports.add( this.model );
+        SC.Models.reports.add( this.model );
         this.model.save();
     },
 

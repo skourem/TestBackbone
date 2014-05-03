@@ -1,7 +1,7 @@
 SC.Views.ReportListView = Backbone.View.extend({
     
-     initialize: function () {
-        this.listenTo(this.collection, 'destroy', 'test');
+    initialize: function () {
+        this.listenTo(this.collection, 'destroy', this.removeReportFromDom);
     },
 
     render: function () {
@@ -29,15 +29,20 @@ SC.Views.ReportListView = Backbone.View.extend({
     },
 
     destroyReport : function(e) {
-        //this.$(e.target).parent().remove();
-        var id = $(e.target).attr('id');
+        var id = $(e.target).parent().attr('id');
         this.collection.get(id).destroy();
-        //this.collection.remove(this.collection.get(id));
-        console.log(this.collection.models.length);
     },
 
-    test : function(e) {
-        console.log(e);
+    removeReportFromDom : function(report) {
+        console.log('destroyed');
+        var li = this.$(['#',report.id].join(''));
+        var ul = li.parent();
+        // it is the last report, so lets remove full card and hide Trash btn
+        if ( ul.children().length === 1) {
+            ul.parent().remove();
+            this.$('a.icon.pull-left').hide();
+        }  
+        else li.remove();
     },
 
     back: function() {

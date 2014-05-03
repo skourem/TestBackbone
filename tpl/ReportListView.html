@@ -1,20 +1,28 @@
 <header class="bar bar-nav">
-	<a class="icon icon-trash pull-left"></a>
+	<% if (models.length) {%>
+		<a class="icon icon-trash pull-left"></a>
+	<% } %>
 	<a href="#" class="icon icon-compose pull-right"></a>
     <h1 class="title">Αιτήματα</h1>
 </header>
 <div class="content">
+	<% if (models.length) {%>
 	<div class="card">
 		<ul class="table-view">
 			<% _.each(models, function(report) { %>
-			<li class="table-view-cell">
+			<li id="<%= report.id %>" class="table-view-cell">
 				<a id="category" class="push-right">
 				<%= report.attributes.address %>
 				</a>
-				<button id="<%= report.id %>" style="display:none;" class="btn btn-negative">x</button>
+				<button style="display:none;" class="btn btn-negative">x</button>
 			</li>
 			<% }); %>
 		</ul>
 	</div>
+	<% } else { %>
+	<div class="card">
+		<h5> Δεν υπάρχουν αποθηκευμένα αιτήματα </h5>
+	</div>
+	<% } %>
 </div>
 
