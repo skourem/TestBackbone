@@ -4,7 +4,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         ""                   : "home",
         "category"           : "category",
         "map"                : "map",
-        "description"        : "description" 
+        "description"        : "description",
+        "reportlist"         : "reportList" 
     },
 
     initialize: function () {
@@ -20,7 +21,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
                 SC.Models.reportInstance.set({'latlng' : SC.latlng});
             }
         });
-        //Reports.fetch();
+        SC.Models.reports.fetch();
+        console.log(SC.Models.reports);
     },
 
     home: function () {
@@ -67,5 +69,12 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
         SC.slider.slidePage(SC.descriptionView.$el);
         //$('body').html(SC.descriptionView.$el);
+    },
+
+    reportList: function () {
+        SC.reportListView = new SC.Views.ReportListView({collection : SC.Models.reports});
+        SC.reportListView.render();
+        SC.slider.slidePage(SC.reportListView.$el);
     }
+
 });

@@ -63,9 +63,14 @@ ul {
     padding-top: 16px;
     font-size: 18px;
 }
-
+/*
 .media-object {
-    width: 42px;
-    height: 42px;
+    width: 24px;
+    height: 24px;
 }
 
+.icon-location {
+    background: transparent url(../images/ic_action_location.png);
+    background-repeat: no-repeat;
+}
+*/

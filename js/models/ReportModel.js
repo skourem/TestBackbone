@@ -11,4 +11,4 @@ SC.Models.ReportList = Backbone.Collection.extend({
 
 });
 
-var Reports = new SC.Models.ReportList;
+SC.Models.reports = new SC.Models.ReportList;
