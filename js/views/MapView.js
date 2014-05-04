@@ -8,6 +8,7 @@ SC.Views.MapView = Backbone.View.extend({
     events: {
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
+        //"focus #address" : "stopListening",
         "submit #address_form" : "searchAddressBing",
         "click #done" : "done",
         "click #terms" : "handleTermsLink"
@@ -47,6 +48,13 @@ SC.Views.MapView = Backbone.View.extend({
         var popup_address = this.model.get('popup_address');
         this.model.set({'address' : popup_address});
         SC.router.navigate('#', {trigger: true});
+    },
+
+    stopListening : function(e) {
+        //console.log('focus');
+        //SC.map.off('move');
+        //e.preventDefault();
+        //this.$('#map').toggle();
     },
 
     initMap : function(center, zoom) {
