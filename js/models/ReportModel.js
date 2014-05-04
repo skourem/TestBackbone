@@ -1,5 +1,10 @@
 SC.Models.Report = Backbone.Model.extend({
-	
+	defaults : {
+		'category' 		: '',
+		'address'		: '',
+		'latlng'		: '',
+		'description'	: ''
+	}
 });
 
 

@@ -11,6 +11,7 @@ SC.Views.MapView = Backbone.View.extend({
         "submit #address_form" : "searchAddressBing",
         "click #done" : "done",
         "click #terms" : "handleTermsLink"
+        //"click #x-span" : "resetAddress"
     },
 
     render: function () {
@@ -27,7 +28,6 @@ SC.Views.MapView = Backbone.View.extend({
 
     renderPopUpAddress: function () {
        SC.marker.bindPopup(this.model.get('popup_address'), {maxWidth: 150}).openPopup();
-       //this.$('#address').val(this.model.get('address'));
        // show 'done' button only when address is found
        if ( !this.model.previous('popup_address') ) this.$('#done').show();
     },
@@ -81,16 +81,18 @@ SC.Views.MapView = Backbone.View.extend({
             this._div.innerHTML = '<i id="gps" class="fa fa-location-arrow fa-4x"></i>';
             return this._div;
         };
+        gpsArrowControl.addTo(SC.map);
+        this.$('#gps').css('margin-bottom', '20px');
+        /*
         searchAddress_Control.onAdd = function() {
             this._div = L.DomUtil.create('div', 'searchAddress_Control');
             this._div.innerHTML = 
                 '<form type="submit" id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="29"  type="text" placeholder="Αναζήτηση..."/></form>';
             return this._div;
         };
-        gpsArrowControl.addTo(SC.map);
         searchAddress_Control.addTo(SC.map);
+        */
         
-        this.$('#gps').css('margin-bottom', '20px');
     },
 
     fireGPS : function() {
@@ -180,6 +182,7 @@ SC.Views.MapView = Backbone.View.extend({
         var bing_url = [], j = -1, self = this;
         bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations?c=el&q=';
         bing_url[++j] = this.$('#address').val();
+        bing_url[++j] = ', Greece';
         bing_url[++j] = '&key=';
         bing_url[++j] = SC.bingmaps_key;
 
@@ -217,6 +220,11 @@ SC.Views.MapView = Backbone.View.extend({
     handleTermsLink : function(e) {
         e.preventDefault();
         window.open(e.target.href, '_blank', 'location=off');
+    },
+
+    resetAddress : function() {
+        this.$('#address').val('');
+        //e.preventDefault();
     },
 
     back: function() {

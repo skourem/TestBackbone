@@ -81,3 +81,19 @@ ul {
 .fa-question-circle.fa-custom {
   font-size : 1.5em;
 }
+
+input.search-map {
+  float: left;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  margin-bottom: 0px;
+  -webkit-border-radius: 0px; 
+}
+
+span.x-span {
+  position : absolute;
+  right : 10px;
+  top : 5px;
+}
+  

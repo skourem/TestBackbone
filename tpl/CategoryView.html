@@ -8,34 +8,17 @@
 	<div class="card">
 		<ul class="table-view">
 			<li class="table-view-divider">Βλάβες</li>
+			<% _.each( blabes, function(elem, index) { %>
 			<li class="table-view-cell">
-				<a>Κλάδεμα, κοπή δέντρου</a> 
+				<a><%= elem %></a> 
 			</li>
-			<li class="table-view-cell">
-				<a>Πινακίδες σήμανσης και καθρέπτες</a> 
-			</li>
-			<li class="table-view-cell">
-				<a>Βλάβες οδοστρώματος</a> 
-			</li>
-			<li class="table-view-cell">
-				<a>Συντήρηση κοινόχρηστων χώρων</a> 
-			</li>
-			<li class="table-view-cell">
-				<a>Βλάβη στο δημοτικό φωτισμό</a> 
-			</li>
-			<li class="table-view-cell">
-				<a>Βλάβη στο δίκτυο ύδρευσης/άδρευσης</a> 
-			</li>
+			<% }); %>
 			<li class="table-view-divider">Διάφορα</li>
+			<% _.each( diafora, function(elem, index) { %>
 			<li class="table-view-cell">
-				<a>Πολεοδομικά θέματα</a> 
+				<a><%= elem %></a> 
 			</li>
-			<li class="table-view-cell">
-				<a>Καταστήματα</a> 
-			</li>
-			<li class="table-view-cell">
-				<a>Άλλα θέματα</a> 
-			</li>
+			<% }); %>
 		</ul>
 	</div>
 </div>

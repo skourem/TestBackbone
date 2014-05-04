@@ -5,6 +5,10 @@ SC.Views.HomeView = Backbone.View.extend({
         this.listenTo(this.model, 'change:address', this.renderAddress);
     },
 
+    events : {
+        "click .btn" : "navigateDescription"
+    },
+
     render: function () {
         this.$el.html(this.template());
     },
@@ -15,10 +19,6 @@ SC.Views.HomeView = Backbone.View.extend({
 
     renderAddress : function() {
         this.$('#position_address').text( this.model.get('address') );
-    },
-
-    events : {
-        "click .btn" : "navigateDescription"
     },
 
     navigateDescription : function() {
