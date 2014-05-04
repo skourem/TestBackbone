@@ -22,10 +22,9 @@ var SC = {
 
 
 $(function () {
-    console.log(navigator.platform);
     if ( _.contains(['Win32','MacIntel'], navigator.platform) ) onDeviceReady();
     else document.addEventListener("deviceready", onDeviceReady, false);
-
+    
     function onDeviceReady() {
         //load .html templates of views
         SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView"],

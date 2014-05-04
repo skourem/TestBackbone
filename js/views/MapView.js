@@ -9,7 +9,8 @@ SC.Views.MapView = Backbone.View.extend({
         "click .btn-back" : "back",
         "click #gps" : "fireGPS",
         "submit #address_form" : "searchAddressBing",
-        "click #done" : "done"
+        "click #done" : "done",
+        "click #terms" : "handleTermsLink"
     },
 
     render: function () {
@@ -51,8 +52,8 @@ SC.Views.MapView = Backbone.View.extend({
     initMap : function(center, zoom) {
         var self = this;
         SC.map = L.map('map', {
-            //layers: MQ.mapLayer(),
-            layers: new L.BingLayer(SC.bingmaps_key, {type : 'Road'}),
+            layers: MQ.mapLayer(),
+            //layers: new L.BingLayer(SC.bingmaps_key, {type : 'Road'}),
             center: center,
             zoom: zoom,
             zoomControl: false,
@@ -211,6 +212,11 @@ SC.Views.MapView = Backbone.View.extend({
         });
         
         return false;
+    },
+
+    handleTermsLink : function(e) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank', 'location=off');
     },
 
     back: function() {
