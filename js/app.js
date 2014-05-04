@@ -17,12 +17,25 @@ var SC = {
         color : '#fff',
         left: '13%'
     },
-    cat : {
-        blabes  : ['Κλάδεμα, κοπή δέντρου','Πινακίδες σήμανσης και καθρέπτες','Συντήρηση κοινόχρηστων χώρων','Βλάβη στο δημοτικό φωτισμό','Βλάβη στο δίκτυο ύδρευσης/άδρευσης'],
-        diafora : ['Πολεοδομικά θέματα','Καταστήματα','Άλλα θέματα']
-    }    
+    cat : [
+        {'id' : 'c1', 'name' : 'Κλάδεμα, κοπή δέντρου',              'group' : 'blabes' },
+        {'id' : 'c2', 'name' : 'Πινακίδες σήμανσης και καθρέπτες',   'group' : 'blabes' },
+        {'id' : 'c3', 'name' : 'Συντήρηση κοινόχρηστων χώρων',       'group' : 'blabes' },
+        {'id' : 'c4', 'name' : 'Βλάβη στο δημοτικό φωτισμό',         'group' : 'blabes' },
+        {'id' : 'c5', 'name' : 'Βλάβη στο δίκτυο ύδρευσης/άδρευσης', 'group' : 'blabes' },
+        {'id' : 'c6', 'name' : 'Πολεοδομικά θέματα',                 'group' : 'diafora'},
+        {'id' : 'c7', 'name' : 'Καταστήματα',                        'group' : 'diafora'},
+        {'id' : 'c8', 'name' : 'Άλλα θέματα',                        'group' : 'diafora'}
+    ],
+    catDom : {
+        blabes  : function() { 
+            return _.where( SC.cat, {'group' : 'blabes'} );
+        },
+        diafora : function() {  
+            return _.where( SC.cat, {'group' : 'diafora'} );
+        }
+    }
 };
-
 
 
 $(function () {
@@ -34,6 +47,7 @@ $(function () {
         SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView"],
             function () {
                 //FastClick.attach(document.body);
+                console.log(SC.catDom.blabes());
                 SC.router = new SC.Routers.AppRouter();
                 Backbone.history.start();
             }

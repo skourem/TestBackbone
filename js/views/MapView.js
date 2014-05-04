@@ -30,7 +30,8 @@ SC.Views.MapView = Backbone.View.extend({
     renderPopUpAddress: function () {
        SC.marker.bindPopup(this.model.get('popup_address'), {maxWidth: 150}).openPopup();
        // show 'done' button only when address is found
-       if ( !this.model.previous('popup_address') ) this.$('#done').show();
+       //if ( !this.model.previous('popup_address') ) this.$('#done').show();
+       this.$('#done').show();
     },
 
     renderMap : function() {
@@ -48,6 +49,7 @@ SC.Views.MapView = Backbone.View.extend({
         var popup_address = this.model.get('popup_address');
         this.model.set({'address' : popup_address});
         SC.router.navigate('#', {trigger: true});
+        this.$('#done').hide();
     },
 
     stopListening : function(e) {

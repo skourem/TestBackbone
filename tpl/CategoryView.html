@@ -3,20 +3,21 @@
         <span class="icon icon-left-nav"></span>Πίσω
     </a>
     <h1 class="title">Τι;</h1>
+    <button id="doneCat" class="btn pull-right" style="display:none;">Επιλογή</button>
 </header>
 <div class="content">
 	<div class="card">
 		<ul class="table-view">
 			<li class="table-view-divider">Βλάβες</li>
-			<% _.each( blabes, function(elem, index) { %>
+			<% _.each( blabes(), function(elem) { %>
 			<li class="table-view-cell">
-				<a><%= elem %></a> 
+				<a id=<%= elem.id %>><%= elem.name %></a> 
 			</li>
 			<% }); %>
 			<li class="table-view-divider">Διάφορα</li>
-			<% _.each( diafora, function(elem, index) { %>
+			<% _.each( diafora(), function(elem) { %>
 			<li class="table-view-cell">
-				<a><%= elem %></a> 
+				<a id=<%= elem.id %>><%= elem.name %></a> 
 			</li>
 			<% }); %>
 		</ul>
