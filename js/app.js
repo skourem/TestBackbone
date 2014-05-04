@@ -15,7 +15,7 @@ var SC = {
         width: 2, // The line thickness
         radius: 5,
         color : '#fff',
-        left: '18%'
+        left: '13%'
     }
 };
 

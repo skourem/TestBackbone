@@ -10,6 +10,7 @@ SC.Views.CategoryView = Backbone.View.extend({
 
         "click li a" : function(e) {
             this.model.set({category : e.target.innerText});
+            console.log(e.target.innerText);
             this.$('.checked').removeClass();
             this.$(e.target).addClass('checked');
         }

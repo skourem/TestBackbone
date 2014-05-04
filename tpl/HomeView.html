@@ -2,7 +2,7 @@
 	<% //if ( (SC.Models.reports) && (SC.Models.reports.length) ) { %>
 		<a href="#reportlist" class="icon icon-list pull-left"></a>
 	<% //} %>
-	<button class="btn pull-right">Βήμα 2</button>
+	<button class="btn pull-right">Περιγραφή</button>
     <h1 class="title">Νέο Αίτημα</h1>
 </header>
 
@@ -11,8 +11,11 @@
 		<ul class="table-view">
 			<li class="table-view-cell media">
 				<a class="push-right" href="#category">
-				<span class="media-object pull-left icon icon-info"></span>
-				<span id="category" style="color:#bbb;">Τι;</span>
+				<span class="media-object pull-left">
+				<i class="fa fa-question-circle fa-lg fa-custom"></i>
+				</span>
+				<span style="color:#bbb;">Τι;</span>
+				<span style="color:#000;" id="category"></span>
 				</a> 
 			</li>
 		</ul>
@@ -21,18 +24,22 @@
 		<ul class="table-view">
 			<li class="table-view-cell media">
 				<a class="push-right" href="#map">
-					<span class="media-object pull-left icon icon-search"></span>
-					<span id="position" style="color:#bbb;">Που;</span>
+					<span class="media-object pull-left">
+					<i class="fa fa-map-marker fa-custom"></i>
+					</span>
+					<span style="color:#bbb;">Που;</span>
+					<span style="color:#000;" id="position_address"></span>
 				</a> 
 			</li>
 		</ul>
 	</div>
 	<div class="card">
 		<ul class="table-view">
-			<li class="table-view-cell">
-				<a class="push-right" href="#">
+			<li class="table-view-cell">			
+				<span class="media-object pull-left">
+				<i class="fa fa-camera-retro fa-lg"></i>
+				</span>
 				<span style="color:#bbb;">Φωτογραφίες;</span>
-				</a> 
 			</li>
 		</ul>
 	</div>

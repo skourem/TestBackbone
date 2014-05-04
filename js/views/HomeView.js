@@ -10,13 +10,11 @@ SC.Views.HomeView = Backbone.View.extend({
     },
 
     renderCategory : function() {
-        this.$('#category').replaceWith( '<span style="color:#bbb;">Τι; </span>'+
-            this.model.get('category') );
+        this.$('#category').text( this.model.get('category') );
     },
 
     renderAddress : function() {
-        this.$('#position').replaceWith( '<span style="color:#bbb;">Που; </span>'+
-            this.model.get('address') );
+        this.$('#position_address').text( this.model.get('address') );
     },
 
     events : {

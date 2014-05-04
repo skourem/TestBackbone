@@ -63,14 +63,21 @@ ul {
     padding-top: 16px;
     font-size: 18px;
 }
-/*
+
 .media-object {
     width: 24px;
     height: 24px;
 }
 
-.icon-location {
-    background: transparent url(../images/ic_action_location.png);
-    background-repeat: no-repeat;
+.btn.circle {
+  -webkit-border-radius : 20px;
 }
-*/
+
+.fa-map-marker.fa-custom {
+  font-size : 1.9em;
+  margin-top : -5px;
+}
+
+.fa-question-circle.fa-custom {
+  font-size : 1.5em;
+}

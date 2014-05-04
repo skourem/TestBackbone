@@ -77,7 +77,7 @@ SC.Views.MapView = Backbone.View.extend({
 
         gpsArrowControl.onAdd = function() {
             this._div = L.DomUtil.create('div', 'gpsArrowControl');
-            this._div.innerHTML = '<img id="gps" src="images/gps_arrow.png"/>';
+            this._div.innerHTML = '<i id="gps" class="fa fa-location-arrow fa-4x"></i>';
             return this._div;
         };
         searchAddress_Control.onAdd = function() {
