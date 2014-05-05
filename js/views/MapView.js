@@ -35,6 +35,7 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     renderMap : function() {
+        alert();
         var displayLatlng = this.model.get('latlng');
         if (_.isEmpty(SC.map)) {
             this.initMap(displayLatlng, 16);

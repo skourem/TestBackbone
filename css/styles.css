@@ -96,4 +96,13 @@ span.x-span {
   right : 10px;
   top : 5px;
 }
+
+.input-group.input-group-fa {
+  margin-left: 20px;
+}
+
+.input-group .fa {
+  position: absolute;
+  margin: 8px -10px;
+}
   

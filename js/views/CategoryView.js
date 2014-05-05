@@ -11,7 +11,10 @@ SC.Views.CategoryView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template(SC.catDom));
+        var blabes  = _.where( SC.cat, {'group' : 'blabes'} ),
+            diafora = _.where( SC.cat, {'group' : 'diafora'} );
+
+        this.$el.html(this.template( { 'blabes' : blabes, 'diafora' : diafora } ) );
         return this;
     },
 

@@ -5,13 +5,15 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         "category"           : "category",
         "map"                : "map",
         "description"        : "description",
-        "reportlist"         : "reportList" 
+        "reportlist"         : "reportList",
+        "account"            : "account" 
     },
 
     initialize: function () {
         SC.slider = new PageSlider($('body'));
         // create a report instance to be shared among Views
         SC.Models.reportInstance = new SC.Models.Report();
+        SC.Models.accountInstance = new SC.Models.Account( window.localStorage.getItem('SmartCitizen_account') || undefined );
 
         //fire device's GPS and then set current Report model's position for DOM changes
         SC.fireGPS(function(position){
@@ -21,8 +23,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
                 SC.Models.reportInstance.set({'latlng' : SC.latlng});
             }
         });
+
         SC.Models.reports.fetch();
-        console.log(SC.Models.reports);
     },
 
     home: function () {
@@ -75,6 +77,11 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         SC.reportListView = new SC.Views.ReportListView({collection : SC.Models.reports});
         SC.reportListView.render();
         SC.slider.slidePage(SC.reportListView.$el);
-    }
+    },
 
+    account : function () {
+        SC.accountView = new SC.Views.AccountView({model : SC.Models.accountInstance});
+        SC.accountView.render();
+        SC.slider.slidePage(SC.accountView.$el);
+    }
 });

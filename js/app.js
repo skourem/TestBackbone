@@ -26,15 +26,7 @@ var SC = {
         {'id' : 'c6', 'name' : 'Πολεοδομικά θέματα',                 'group' : 'diafora'},
         {'id' : 'c7', 'name' : 'Καταστήματα',                        'group' : 'diafora'},
         {'id' : 'c8', 'name' : 'Άλλα θέματα',                        'group' : 'diafora'}
-    ],
-    catDom : {
-        blabes  : function() { 
-            return _.where( SC.cat, {'group' : 'blabes'} );
-        },
-        diafora : function() {  
-            return _.where( SC.cat, {'group' : 'diafora'} );
-        }
-    }
+    ]
 };
 
 
@@ -44,10 +36,9 @@ $(function () {
     
     function onDeviceReady() {
         //load .html templates of views
-        SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView"],
+        SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView", "AccountView"],
             function () {
                 //FastClick.attach(document.body);
-                console.log(SC.catDom.blabes());
                 SC.router = new SC.Routers.AppRouter();
                 Backbone.history.start();
             }
