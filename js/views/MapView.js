@@ -61,6 +61,17 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     initMap : function(center, zoom) {
+        
+        var map = new Microsoft.Maps.Map(document.getElementById("map"), {
+            credentials : SC.bingmaps_key,
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            showMapTypeSelector: false,
+            center: new Microsoft.Maps.Location(39, 22),
+            zoom : 5
+        });
+        Microsoft.Maps.Events.addHandler(map, 'viewchange', function(){console.log('changed');});
+        
+        /*
         var self = this;
         SC.map = L.map('map', {
             layers: MQ.mapLayer(),
@@ -72,7 +83,7 @@ SC.Views.MapView = Backbone.View.extend({
             scrollWheelZoom: false,
             doubleClickZoom: false,
             boxZoom: false
-        });     
+        });
 
         SC.marker = L.circleMarker(center, {radius: 10}).addTo(SC.map);
         SC.map.on('move', function () {
@@ -94,16 +105,7 @@ SC.Views.MapView = Backbone.View.extend({
         };
         gpsArrowControl.addTo(SC.map);
         this.$('#gps').css('margin-bottom', '20px');
-        /*
-        searchAddress_Control.onAdd = function() {
-            this._div = L.DomUtil.create('div', 'searchAddress_Control');
-            this._div.innerHTML = 
-                '<form type="submit" id="address_form"><input id="address" style="-webkit-border-radius:15px;" size="29"  type="text" placeholder="Αναζήτηση..."/></form>';
-            return this._div;
-        };
-        searchAddress_Control.addTo(SC.map);
         */
-        
     },
 
     fireGPS : function() {
