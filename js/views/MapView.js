@@ -1,8 +1,8 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress);
-        this.listenTo(SC.Models.mediator, 'change:latlng', this.changeMapView);
+        //this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress);
+        this.listenTo(SC.Models.mediator, 'change:latlng', this.changeBingMapView);
     },
 
     events: {
@@ -19,24 +19,35 @@ SC.Views.MapView = Backbone.View.extend({
         var self = this;
         setTimeout(function(){
             // if fireGPS returned latlng
-            if (SC.latlng) self.initMap( SC.latlng, 16 );
+            if (SC.latlng) self.initBingMap( SC.latlng, 16 );
             // else initMap in Greece 
-            else self.initMap( L.latLng(39,22), 7 ); 
+            else self.initBingMap( L.latLng(39,22), 7 ); 
         });
         
         return this;
     },
 
-    changeMapView : function() {
+    changeLeafletMapView : function() {
         var latlng = SC.Models.mediator.get('latlng');
         var leafLatLng = L.latLng(latlng.lat, latlng.lng);
         SC.map.setView(leafLatLng, 16);
+    },
+
+    changeBingMapView : function() {
+        var latlng = SC.Models.mediator.get('latlng');
+        SC.map.setView({ zoom: 16, center: new Microsoft.Maps.Location(latlng.lat, latlng.lng) })
     },
 
     changePopUpAddress: function () {
        SC.marker.bindPopup(SC.Models.mediator.get('address'), {maxWidth: 150}).openPopup();
        this.$('#done').show();
     },
+
+    changePopUpAddressBing: function () {
+       SC.marker.bindPopup(SC.Models.mediator.get('address'), {maxWidth: 150}).openPopup();
+       this.$('#done').show();
+    },
+
 
     done: function (e) {
         e.preventDefault();
@@ -46,22 +57,42 @@ SC.Views.MapView = Backbone.View.extend({
         this.$('#done').hide();
     },
 
-    initMap : function(center, zoom) {
-        /*
-        var map = new Microsoft.Maps.Map(document.getElementById("map"), {
+    initBingMap : function(center, zoom) {
+        var self = this;
+        SC.map = new Microsoft.Maps.Map(document.getElementById("map"), {
             credentials : SC.bingmaps_key,
             mapTypeId: Microsoft.Maps.MapTypeId.road,
             showMapTypeSelector: false,
-            center: new Microsoft.Maps.Location(39, 22),
-            zoom : 5
+            center: new Microsoft.Maps.Location(center.lat, center.lng),
+            zoom : zoom
         });
-        Microsoft.Maps.Events.addHandler(map, 'viewchange', function(){console.log('changed');});
-        */
-        
+        SC.pushpin = new Microsoft.Maps.Pushpin(SC.map.getCenter(), null);
+        SC.map.entities.push(SC.pushpin);
+        Microsoft.Maps.Events.addHandler(SC.map, 'viewchange', function(){
+            SC.pushpin.setLocation(SC.map.getCenter()); 
+        });
+        Microsoft.Maps.Events.addHandler(SC.map, 'viewchangeend', function(){
+            var location = SC.pushpin.getLocation();
+            var latlng = {lat:location.latitude, lng:location.longitude};
+            SC.Models.mediator.set({ 'latlng' :  latlng }, {silent:true});
+            self.searchLatLngBing(latlng);
+        });
+
+        // Create the infobox for the pushpin
+        pinInfobox = new Microsoft.Maps.Infobox(SC.pushpin.getLocation(), 
+            {   title: 'My Pushpin', 
+                description: 'This pushpin is located at (0,0).', 
+                visible: true, 
+                offset: new Microsoft.Maps.Point(0,15)
+            });
+        SC.map.entities.push(pinInfobox);
+
+    },
+
+    initMap : function(center, zoom) {
         var self = this;
         SC.map = L.map('map', {
             layers: MQ.mapLayer(),
-            //layers: new L.BingLayer(SC.bingmaps_key, {type : 'Road'}),
             center: center,
             zoom: zoom,
             zoomControl: false,
@@ -139,7 +170,6 @@ SC.Views.MapView = Backbone.View.extend({
         $.get(bing_url.join(''), function(data){
             console.log(data);
             var resources = data.resourceSets[0].resources[0];
-            SC.Models.mediator.set({ 'latlng' :  latlng });
             SC.Models.mediator.set({'address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
         });
         
