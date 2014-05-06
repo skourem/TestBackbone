@@ -2,6 +2,7 @@ SC.Routers.AppRouter = Backbone.Router.extend({
 
     routes: {
         ""                   : "home",
+        "home/:id"           : "home",
         "category"           : "category",
         "map"                : "map",
         "description"        : "description",
@@ -11,25 +12,23 @@ SC.Routers.AppRouter = Backbone.Router.extend({
 
     initialize: function () {
         SC.slider = new PageSlider($('body'));
-        // create a report instance to be shared among Views
-        SC.Models.reportInstance = new SC.Models.Report();
-        SC.Models.accountInstance = new SC.Models.Account( JSON.parse( window.localStorage.getItem('SmartCitizen_account') || undefined ) );
+        SC.Models.reports.fetch();
+        SC.Models.accountInstance = new SC.Models.Account( JSON.parse( window.localStorage.getItem('SmartCitizen_account') ) || undefined  );
         SC.Models.mediator = new SC.Models.Mediator();
-
-
         //fire device's GPS and then set model's latlng for DOM changes
         SC.fireGPS(function(position){
             console.log(position.coords);
             SC.latlng = {lat: position.coords.latitude, lng : position.coords.longitude };
-            //if ( !SC.Models.reportInstance.get('latlng') ) {
-            //SC.Models.mediator.set({'latlng' : SC.latlng});
-            //}
         });
-
-        SC.Models.reports.fetch();
     },
 
-    home: function () {
+    home: function (id) {
+        if (id) {
+            SC.Models.reportInstance = SC.Models.reports.get(id);
+            console.log(SC.Models.reportInstance);
+        } else {
+            SC.Models.reportInstance = new SC.Models.Report();
+        }
         if (!SC.homeView) {
             SC.homeView = new SC.Views.HomeView({model : SC.Models.reportInstance});
             SC.homeView.render();

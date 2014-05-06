@@ -9,7 +9,7 @@ SC.Models.Report = Backbone.Model.extend({
 
 SC.Models.Account = Backbone.Model.extend({
 	defaults : {
-		'name' 			: 'stelios',
+		'name' 			: '',
 		'surname'		: '',
 		'address'		: '',
 		'tel'			: ''
