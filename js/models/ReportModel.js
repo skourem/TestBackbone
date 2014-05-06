@@ -16,6 +16,9 @@ SC.Models.Account = Backbone.Model.extend({
 	}
 });
 
+SC.Models.Mediator = Backbone.Model.extend({
+});
+
 
 SC.Models.ReportList = Backbone.Collection.extend({
 	

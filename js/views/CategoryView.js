@@ -1,9 +1,5 @@
 SC.Views.CategoryView = Backbone.View.extend({
     
-    initialize: function () {
-        //this.listenTo(this.model, 'change:category', this.checkCat);
-    },
-
     events : {
         "click .btn-back": "back",
         "click li a" : "toggleCheck",
@@ -27,13 +23,13 @@ SC.Views.CategoryView = Backbone.View.extend({
 
     setCategory : function(e) {
         e.preventDefault();
-        var _category = this.$('.checked').text();
-        this.model.set( { category : _category } );
+        this.model.set( { category : this.$('.checked').text() } );
         SC.router.navigate('', {trigger: true});
         this.$('#doneCat').hide();
     },
 
-    back: function() {
+    back: function(e) {
+        e.preventDefault();
         window.history.back();
         return false;
     }

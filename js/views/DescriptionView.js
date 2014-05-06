@@ -17,7 +17,8 @@ SC.Views.DescriptionView = Backbone.View.extend({
         "keypress #description" : "uncheckSaveBtn"
     },
 
-    saveNewReport : function() {
+    saveNewReport : function(e) {
+        e.preventDefault();
         this.model.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
         SC.Models.reports.add( this.model );
         this.model.save();
@@ -32,7 +33,7 @@ SC.Views.DescriptionView = Backbone.View.extend({
     },
 
     callMunicipality : function(e) {
-        
+        console.log(this.model.attributes);
         var postgis_url = [], j = -1, self = this;
         var latlng = this.model.get('latlng');
         postgis_url[++j] = SC.root;
@@ -47,11 +48,11 @@ SC.Views.DescriptionView = Backbone.View.extend({
             console.log(data);
             var municipality = JSON.parse(data);
             console.log(municipality.name);
-            spinner.stop();
-        })
+        }).always(function() {spinner.stop();});
     },
 
-    back: function() {
+    back: function(e) {
+        e.preventDefault();
         window.history.back();
         return false;
     }

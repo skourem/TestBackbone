@@ -3,17 +3,19 @@
         <span class="icon icon-left-nav"></span>Πίσω
     </a>
     <h1 class="title">Προφίλ</h1>
-    <button id="doneCat" class="btn pull-right" style="display:none;">Αποθήκευση</button>
+    <button style="padding-left:5px; padding-right:5px;" id="save" class="btn pull-right">
+	<span style="font-size: 14px; top:0px; display: none;" class="icon icon-check"></span>
+    Αποθήκευση</button>
 </header>
 <div class="content">
 		<form id="account" class="input-group input-group-fa">
 			<i class="fa fa-info"></i>
-			<input id="name" type="text" placeholder="Όνομα"/>
+			<input id="name" name="name" type="text" placeholder="Όνομα" value="<%= name %>"/>
 			<i class="fa fa-info"></i>
-			<input id="surname" type="text" placeholder="Επώνυμο"/>
+			<input id="surname" name="surname" type="text" placeholder="Επώνυμο" value="<%= surname %>"/>
 			<i class="fa fa-home"></i>
-			<input id="account_address" type="text" placeholder="Διεύθυνση"/>
+			<input id="account_address" name="address" type="text" placeholder="Διεύθυνση" value="<%= address %>"/>
 			<i class="fa fa-phone"></i>
-			<input id="tel" type="tel" placeholder="Τηλέφωνο"/>
+			<input id="tel" name="tel" type="tel" placeholder="Τηλέφωνο" value="<%= tel %>"/>
 		</form>	
 </div>

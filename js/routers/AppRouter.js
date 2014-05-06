@@ -13,15 +13,17 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         SC.slider = new PageSlider($('body'));
         // create a report instance to be shared among Views
         SC.Models.reportInstance = new SC.Models.Report();
-        SC.Models.accountInstance = new SC.Models.Account( window.localStorage.getItem('SmartCitizen_account') || undefined );
+        SC.Models.accountInstance = new SC.Models.Account( JSON.parse( window.localStorage.getItem('SmartCitizen_account') || undefined ) );
+        SC.Models.mediator = new SC.Models.Mediator();
 
-        //fire device's GPS and then set current Report model's position for DOM changes
+
+        //fire device's GPS and then set model's latlng for DOM changes
         SC.fireGPS(function(position){
             console.log(position.coords);
-            SC.latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-            if ( !SC.Models.reportInstance.get('latlng') ) {
-                SC.Models.reportInstance.set({'latlng' : SC.latlng});
-            }
+            SC.latlng = {lat: position.coords.latitude, lng : position.coords.longitude };
+            //if ( !SC.Models.reportInstance.get('latlng') ) {
+            //SC.Models.mediator.set({'latlng' : SC.latlng});
+            //}
         });
 
         SC.Models.reports.fetch();
@@ -80,8 +82,14 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     },
 
     account : function () {
-        SC.accountView = new SC.Views.AccountView({model : SC.Models.accountInstance});
-        SC.accountView.render();
+        if (!SC.accountView) {
+            SC.accountView = new SC.Views.AccountView({model : SC.Models.accountInstance});
+            SC.accountView.render();
+        } else {
+            SC.accountView.render();
+            console.log('reusing Account view');
+            SC.accountView.delegateEvents();
+        }
         SC.slider.slidePage(SC.accountView.$el);
     }
 });

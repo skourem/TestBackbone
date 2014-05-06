@@ -1,14 +1,13 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        this.listenTo(this.model, 'change:popup_address', this.renderPopUpAddress);
-        this.listenTo(this.model, 'change:latlng', this.renderMap);
+        this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress);
+        this.listenTo(SC.Models.mediator, 'change:latlng', this.changeMapView);
     },
 
     events: {
         "click .btn-back" : "back",
-        "click #gps" : "fireGPS",
-        //"focus #address" : "stopListening",
+        "click #gps" : "clickGPS",
         "submit #address_form" : "searchAddressBing",
         "click #done" : "done",
         "click #terms" : "handleTermsLink"
@@ -19,49 +18,36 @@ SC.Views.MapView = Backbone.View.extend({
         this.$el.html(this.template());
         var self = this;
         setTimeout(function(){
-            if (SC.latlng) self.initMap(SC.latlng, 16);
-            // initMap in Greece 
-            else self.initMap(L.latLng(39,22), 7); 
+            // if fireGPS returned latlng
+            if (SC.latlng) self.initMap( SC.latlng, 16 );
+            // else initMap in Greece 
+            else self.initMap( L.latLng(39,22), 7 ); 
         });
         
         return this;
     },
 
-    renderPopUpAddress: function () {
-       SC.marker.bindPopup(this.model.get('popup_address'), {maxWidth: 150}).openPopup();
-       // show 'done' button only when address is found
-       //if ( !this.model.previous('popup_address') ) this.$('#done').show();
+    changeMapView : function() {
+        var latlng = SC.Models.mediator.get('latlng');
+        var leafLatLng = L.latLng(latlng.lat, latlng.lng);
+        SC.map.setView(leafLatLng, 16);
+    },
+
+    changePopUpAddress: function () {
+       SC.marker.bindPopup(SC.Models.mediator.get('address'), {maxWidth: 150}).openPopup();
        this.$('#done').show();
     },
 
-    renderMap : function() {
-        alert();
-        var displayLatlng = this.model.get('latlng');
-        if (_.isEmpty(SC.map)) {
-            this.initMap(displayLatlng, 16);
-        }
-        else {
-            if ( !this.model.previous('latlng') ) SC.map.setZoom(16);
-            SC.map.setView(displayLatlng);
-        }    
-    },
-
-    done: function () {
-        var popup_address = this.model.get('popup_address');
-        this.model.set({'address' : popup_address});
+    done: function (e) {
+        e.preventDefault();
+        this.model.set({'address' : SC.Models.mediator.get('address')});
+        this.model.set({'latlng'  : SC.Models.mediator.get('latlng')});
         SC.router.navigate('#', {trigger: true});
         this.$('#done').hide();
     },
 
-    stopListening : function(e) {
-        //console.log('focus');
-        //SC.map.off('move');
-        //e.preventDefault();
-        //this.$('#map').toggle();
-    },
-
     initMap : function(center, zoom) {
-        
+        /*
         var map = new Microsoft.Maps.Map(document.getElementById("map"), {
             credentials : SC.bingmaps_key,
             mapTypeId: Microsoft.Maps.MapTypeId.road,
@@ -70,8 +56,8 @@ SC.Views.MapView = Backbone.View.extend({
             zoom : 5
         });
         Microsoft.Maps.Events.addHandler(map, 'viewchange', function(){console.log('changed');});
+        */
         
-        /*
         var self = this;
         SC.map = L.map('map', {
             layers: MQ.mapLayer(),
@@ -86,6 +72,7 @@ SC.Views.MapView = Backbone.View.extend({
         });
 
         SC.marker = L.circleMarker(center, {radius: 10}).addTo(SC.map);
+        //self.searchLatLngBing(center);
         SC.map.on('move', function () {
             SC.marker.setLatLng(SC.map.getCenter());
         });
@@ -105,19 +92,76 @@ SC.Views.MapView = Backbone.View.extend({
         };
         gpsArrowControl.addTo(SC.map);
         this.$('#gps').css('margin-bottom', '20px');
-        */
+        
+        
     },
 
-    fireGPS : function() {
+    clickGPS : function(e) {
+        e.preventDefault();
         var self = this;
         SC.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
-            self.model.set({ 'latlng' : latlng });
-            console.log(self.model);
+            SC.Models.mediator.set({ 'latlng' : latlng });
         });
     },
 
+    searchAddressBing: function() {
+        var bing_url = [], j = -1, self = this;
+        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations?c=el&q=';
+        bing_url[++j] = this.$('#address').val();
+        bing_url[++j] = ', Greece';
+        bing_url[++j] = '&key=';
+        bing_url[++j] = SC.bingmaps_key;
+
+        console.log(bing_url.join(''));
+        $.get(bing_url.join(''), function(data){
+            console.log(data);
+            var resources = data.resourceSets[0].resources[0];
+            var latlng = {'lat' : resources.point.coordinates[0], 'lng' : resources.point.coordinates[1]};
+            SC.Models.mediator.set({ 'latlng' :  latlng });
+            SC.Models.mediator.set({'address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
+        });
+        
+        return false;
+    },
+
+    searchLatLngBing: function(latlng) {
+        var bing_url = [], j = -1, self = this;
+        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations/';
+        bing_url[++j] = latlng.lat;
+        bing_url[++j] = ',';
+        bing_url[++j] = latlng.lng;
+        bing_url[++j] = '?c=el&key=';
+        bing_url[++j] = SC.bingmaps_key;
+        
+        console.log(bing_url.join(''));
+        $.get(bing_url.join(''), function(data){
+            console.log(data);
+            var resources = data.resourceSets[0].resources[0];
+            SC.Models.mediator.set({ 'latlng' :  latlng });
+            SC.Models.mediator.set({'address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
+        });
+        
+        return false;
+    },
+
+    handleTermsLink : function(e) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank', 'location=off');
+    },
+
+    resetAddress : function() {
+        this.$('#address').val('');
+        //e.preventDefault();
+    },
+
+    back: function(e) {
+        e.preventDefault();
+        window.history.back();
+        return false;
+    }
+    /*
     searchAddress: function() {
         var mapquest_url = [], j = -1, self = this;
         mapquest_url[++j] = 'http://www.mapquestapi.com/geocoding/v1/address?&key=';
@@ -191,58 +235,6 @@ SC.Views.MapView = Backbone.View.extend({
         return false;
     },
     
-    searchAddressBing: function() {
-        var bing_url = [], j = -1, self = this;
-        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations?c=el&q=';
-        bing_url[++j] = this.$('#address').val();
-        bing_url[++j] = ', Greece';
-        bing_url[++j] = '&key=';
-        bing_url[++j] = SC.bingmaps_key;
-
-        console.log(bing_url.join(''));
-        $.get(bing_url.join(''), function(data){
-            console.log(data);
-            var resources = data.resourceSets[0].resources[0];
-            var latlng = {'lat' : resources.point.coordinates[0], 'lng' : resources.point.coordinates[1]};
-            self.model.set({ 'latlng' :  latlng });
-            self.model.set({'popup_address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
-        });
-        
-        return false;
-    },
-
-    searchLatLngBing: function(latlng) {
-        var bing_url = [], j = -1, self = this;
-        bing_url[++j] = 'http://dev.virtualearth.net/REST/v1/Locations/';
-        bing_url[++j] = latlng.lat;
-        bing_url[++j] = ',';
-        bing_url[++j] = latlng.lng;
-        bing_url[++j] = '?c=el&key=';
-        bing_url[++j] = SC.bingmaps_key;
-        
-        console.log(bing_url.join(''));
-        $.get(bing_url.join(''), function(data){
-            console.log(data);
-            var resources = data.resourceSets[0].resources[0];
-            self.model.set({'popup_address' : resources.name.replace(', Ελληνικη Δημοκρατια', '')});
-        });
-        
-        return false;
-    },
-
-    handleTermsLink : function(e) {
-        e.preventDefault();
-        window.open(e.target.href, '_blank', 'location=off');
-    },
-
-    resetAddress : function() {
-        this.$('#address').val('');
-        //e.preventDefault();
-    },
-
-    back: function() {
-        window.history.back();
-        return false;
-    }
+   */
 
 });
