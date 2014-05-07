@@ -13,7 +13,7 @@
 		<ul class="table-view">
 			<% _.each(models, function(report) { %>
 			<li id="<%= report.id %>" class="table-view-cell">
-				<a id="category" class="push-right">
+				<a id="category" class="push-right" href="/#home/<%=report.id%>">
 				<%= moment.unix(report.get('timestamp')).fromNow() %>
 				<%= report.get('address') %>
 				</a>

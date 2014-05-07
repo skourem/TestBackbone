@@ -20,15 +20,16 @@ SC.Routers.AppRouter = Backbone.Router.extend({
             console.log(position.coords);
             SC.latlng = { lat: position.coords.latitude, lng : position.coords.longitude };
         });
+        SC.reportListView = new SC.Views.ReportListView({collection : SC.Models.reports});
+        SC.reportListView.render();
+
+        SC.Models.newReport = new SC.Models.Report();
     },
 
     home: function (id) {
-        if (id) {
-            SC.Models.reportInstance = SC.Models.reports.get(id);
-            console.log(SC.Models.reportInstance);
-        } else {
-            SC.Models.reportInstance = new SC.Models.Report();
-        }
+        
+        SC.Models.reportInstance = id ? SC.Models.reports.get(id) : SC.Models.newReport;
+        console.log(SC.Models.reportInstance);
         if (!SC.homeView) {
             SC.homeView = new SC.Views.HomeView({model : SC.Models.reportInstance});
             SC.homeView.render();
@@ -54,6 +55,13 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         //$('body').html(SC.categoryView.$el);
     },
 
+    description: function () {
+        console.log('reusing Description view');
+        SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
+        SC.slider.slidePage(SC.descriptionView.$el);
+        //$('body').html(SC.descriptionView.$el);
+    },
+
     map: function () {
         if (!SC.mapView) {
             SC.mapView = new SC.Views.MapView({model : SC.Models.reportInstance});
@@ -67,16 +75,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
 
     },
 
-    description: function () {
-        console.log('reusing Description view');
-        SC.descriptionView.delegateEvents(); // delegate events when the view is recycled
-        SC.slider.slidePage(SC.descriptionView.$el);
-        //$('body').html(SC.descriptionView.$el);
-    },
-
     reportList: function () {
-        SC.reportListView = new SC.Views.ReportListView({collection : SC.Models.reports});
-        SC.reportListView.render();
+        SC.reportListView.delegateEvents();
         SC.slider.slidePage(SC.reportListView.$el);
     },
 

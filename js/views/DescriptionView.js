@@ -7,7 +7,7 @@ SC.Views.DescriptionView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template({phone:''}));
+        this.$el.html(this.template({description : this.model.get('description')}));
         return this;
     },
 

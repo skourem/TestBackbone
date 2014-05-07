@@ -2,6 +2,7 @@ SC.Views.ReportListView = Backbone.View.extend({
     
     initialize: function () {
         this.listenTo(this.collection, 'destroy', this.removeReportFromDom);
+        this.listenTo(this.collection, 'sync', this.render);
     },
 
     render: function () {
@@ -14,7 +15,7 @@ SC.Views.ReportListView = Backbone.View.extend({
         "click .icon-close" : "hideDeleteBtns",
         "click .btn-negative" : "destroyReport",
         "click #compose" : "newReport",
-        "click li a" : "loadReport",
+        //"click li a" : "loadReport",
         "click .btn-back": "back"
     },
 
