@@ -1,8 +1,13 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        //this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress);
-        this.listenTo(SC.Models.mediator, 'change:latlng', this.changeBingMapView);
+        if (SC.bing) {
+            this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress_bing);
+            this.listenTo(SC.Models.mediator, 'change:latlng', this.changeMapView_bing);
+        } else {
+            this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress_leaflet);
+            this.listenTo(SC.Models.mediator, 'change:latlng', this.changeMapView_leaflet);
+        }            
     },
 
     events: {
@@ -17,44 +22,36 @@ SC.Views.MapView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template());
         var self = this;
+        var greece = {lat: 39, lng: 22}, //Greece!!!!
+            latlng = SC.latlng ? SC.latlng : greece,
+            zoom = SC.latlng ? 16 : 7;
         setTimeout(function(){
-            // if fireGPS returned latlng
-            if (SC.latlng) self.initBingMap( SC.latlng, 16 );
-            // else initMap in Greece 
-            else self.initBingMap( L.latLng(39,22), 7 ); 
+           if (SC.bing) self.initBingMap( latlng, zoom );
+           else self.initLeafletMap( latlng, zoom );
         });
         
         return this;
     },
 
-    changeLeafletMapView : function() {
+    changeMapView_leaflet : function() {
         var latlng = SC.Models.mediator.get('latlng');
         var leafLatLng = L.latLng(latlng.lat, latlng.lng);
         SC.map.setView(leafLatLng, 16);
     },
 
-    changeBingMapView : function() {
+    changeMapView_bing : function() {
         var latlng = SC.Models.mediator.get('latlng');
         SC.map.setView({ zoom: 16, center: new Microsoft.Maps.Location(latlng.lat, latlng.lng) })
     },
 
-    changePopUpAddress: function () {
+    changePopUpAddress_leaflet: function () {
        SC.marker.bindPopup(SC.Models.mediator.get('address'), {maxWidth: 150}).openPopup();
        this.$('#done').show();
     },
 
-    changePopUpAddressBing: function () {
-       SC.marker.bindPopup(SC.Models.mediator.get('address'), {maxWidth: 150}).openPopup();
+    changePopUpAddress_bing: function () {
+       self.$('#pp').text(SC.Models.mediator.get('address'));
        this.$('#done').show();
-    },
-
-
-    done: function (e) {
-        e.preventDefault();
-        this.model.set({'address' : SC.Models.mediator.get('address')});
-        this.model.set({'latlng'  : SC.Models.mediator.get('latlng')});
-        SC.router.navigate('#', {trigger: true});
-        this.$('#done').hide();
     },
 
     initBingMap : function(center, zoom) {
@@ -63,13 +60,25 @@ SC.Views.MapView = Backbone.View.extend({
             credentials : SC.bingmaps_key,
             mapTypeId: Microsoft.Maps.MapTypeId.road,
             showMapTypeSelector: false,
+            showDashboard: false,
+            enableSearchLogo: false,
             center: new Microsoft.Maps.Location(center.lat, center.lng),
             zoom : zoom
         });
         SC.pushpin = new Microsoft.Maps.Pushpin(SC.map.getCenter(), null);
         SC.map.entities.push(SC.pushpin);
+
+        var pushpinOptions = {
+            width: null, 
+            height: null,
+            htmlContent: '<div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
+        }; 
+        SC.pushpin_address = new Microsoft.Maps.Pushpin(SC.map.getCenter(), pushpinOptions);
+        SC.map.entities.push(SC.pushpin_address);
+
         Microsoft.Maps.Events.addHandler(SC.map, 'viewchange', function(){
-            SC.pushpin.setLocation(SC.map.getCenter()); 
+            SC.pushpin.setLocation(SC.map.getCenter());
+            SC.pushpin_address.setLocation(SC.map.getCenter());
         });
         Microsoft.Maps.Events.addHandler(SC.map, 'viewchangeend', function(){
             var location = SC.pushpin.getLocation();
@@ -77,23 +86,13 @@ SC.Views.MapView = Backbone.View.extend({
             SC.Models.mediator.set({ 'latlng' :  latlng }, {silent:true});
             self.searchLatLngBing(latlng);
         });
-
-        // Create the infobox for the pushpin
-        pinInfobox = new Microsoft.Maps.Infobox(SC.pushpin.getLocation(), 
-            {   title: 'My Pushpin', 
-                description: 'This pushpin is located at (0,0).', 
-                visible: true, 
-                offset: new Microsoft.Maps.Point(0,15)
-            });
-        SC.map.entities.push(pinInfobox);
-
     },
 
-    initMap : function(center, zoom) {
+    initLeafletMap : function(center, zoom) {
         var self = this;
         SC.map = L.map('map', {
             layers: MQ.mapLayer(),
-            center: center,
+            center: L.latLng(center.lat, center.lng),
             zoom: zoom,
             zoomControl: false,
             touchZoom: false,
@@ -174,6 +173,14 @@ SC.Views.MapView = Backbone.View.extend({
         });
         
         return false;
+    },
+
+    done: function (e) {
+        e.preventDefault();
+        this.model.set({'address' : SC.Models.mediator.get('address')});
+        this.model.set({'latlng'  : SC.Models.mediator.get('latlng')});
+        SC.router.navigate('#', {trigger: true});
+        this.$('#done').hide();
     },
 
     handleTermsLink : function(e) {

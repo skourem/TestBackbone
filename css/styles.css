@@ -105,4 +105,16 @@ span.x-span {
   position: absolute;
   margin: 8px -10px;
 }
+
+.pushpin-address {
+  width: 140px;
+  position: relative;
+  bottom: 100px;
+  right: 55px;
+  background: #428bca;
+  -webkit-border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  padding-left: 4px;
+}
   

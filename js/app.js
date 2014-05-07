@@ -26,7 +26,8 @@ var SC = {
         {'id' : 'c6', 'name' : 'Πολεοδομικά θέματα',                 'group' : 'diafora'},
         {'id' : 'c7', 'name' : 'Καταστήματα',                        'group' : 'diafora'},
         {'id' : 'c8', 'name' : 'Άλλα θέματα',                        'group' : 'diafora'}
-    ]
+    ],
+    bing : false
 };
 
 
