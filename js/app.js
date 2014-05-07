@@ -27,7 +27,7 @@ var SC = {
         {'id' : 'c7', 'name' : 'Καταστήματα',                        'group' : 'diafora'},
         {'id' : 'c8', 'name' : 'Άλλα θέματα',                        'group' : 'diafora'}
     ],
-    bing : false
+    bingMaps : true
 };
 
 
@@ -42,6 +42,7 @@ $(function () {
                 //FastClick.attach(document.body);
                 SC.router = new SC.Routers.AppRouter();
                 Backbone.history.start();
+                moment.lang('el');
             }
         );
     }    

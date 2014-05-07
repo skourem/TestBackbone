@@ -109,12 +109,31 @@ span.x-span {
 .pushpin-address {
   width: 140px;
   position: relative;
-  bottom: 100px;
+  bottom: 110px;
   right: 55px;
   background: #428bca;
   -webkit-border-radius: 5px;
   color: white;
   font-size: 12px;
   padding-left: 4px;
+  padding-bottom: 6px;
 }
-  
+
+.pushpin-arrow {
+  width: 30px;
+  position: relative;
+  bottom: 84px;
+  right: 85px;
+  background: #428bca;
+  -webkit-border-radius: 5px;
+  color: white;
+  font-size: 12px;
+  padding-left: 4px;
+}
+
+.modal-bottom {
+  display: none;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}

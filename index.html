@@ -18,6 +18,7 @@
 <script src="lib/backbone.localStorage.js"></script>
 <script src="lib/pageslider.js"></script>
 <script src="lib/fastclick.js"></script>
+<script src="lib/moment-with-langs.js"></script>
 <script src="lib/spin.js"></script>
 <script src="lib/leaflet-src.js"></script>
 <script src="lib/leaflet.mapquest.js"></script>
@@ -40,6 +41,43 @@
 <script src="js/views/AccountView.js"></script>
 <script src="js/models/ReportModel.js"></script>
 <script src="js/routers/AppRouter.js"></script>
+
+<script type="text/template" id="modal_phones_template">
+    <div class="card">
+        <ul class="table-view">
+        	<li class="table-view-cell">
+                Δήμος <%= name %>
+            </li>
+            <% if (thl1) { %>
+				<li class="table-view-cell media">
+				<a href="tel:<%= thl1 %>">
+					<span class="media-object pull-left">
+					<i class="fa fa-phone fa-lg fa-custom"></i>
+					</span>
+					<span style="color:#bbb;"><%= thl1 %></span>
+				</a> 
+				</li>
+            <% } %>
+			<% if (thl2) { %>
+				<li class="table-view-cell media">
+				<a href="tel:<%= thl2 %>">
+					<span class="media-object pull-left">
+					<i class="fa fa-phone fa-lg fa-custom"></i>
+					</span>
+					<span style="color:#bbb;"><%= thl2 %></span>
+				</a> 
+				</li>
+            <% } %>
+        </ul>
+    </div>
+    <div class="card">
+        <ul class="table-view">
+            <li class="table-view-cell">
+                <a id="modal_cancel" align="center">Ακύρωση</a> 
+            </li>
+        </ul>
+    </div>
+</script>
 
 </body>
 </html>

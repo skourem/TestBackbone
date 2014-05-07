@@ -1,7 +1,7 @@
 SC.Views.MapView = Backbone.View.extend({
     
     initialize: function () {
-        if (SC.bing) {
+        if (SC.bingMaps) {
             this.listenTo(SC.Models.mediator, 'change:address', this.changePopUpAddress_bing);
             this.listenTo(SC.Models.mediator, 'change:latlng', this.changeMapView_bing);
         } else {
@@ -26,7 +26,7 @@ SC.Views.MapView = Backbone.View.extend({
             latlng = SC.latlng ? SC.latlng : greece,
             zoom = SC.latlng ? 16 : 7;
         setTimeout(function(){
-           if (SC.bing) self.initBingMap( latlng, zoom );
+           if (SC.bingMaps) self.initBingMap( latlng, zoom );
            else self.initLeafletMap( latlng, zoom );
         });
         
@@ -71,7 +71,7 @@ SC.Views.MapView = Backbone.View.extend({
         var pushpinOptions = {
             width: null, 
             height: null,
-            htmlContent: '<div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
+            htmlContent: '<div class="pushpin-arrow"><i id="gps" class="fa fa-location-arrow fa-2x"></i></div><div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
         }; 
         SC.pushpin_address = new Microsoft.Maps.Pushpin(SC.map.getCenter(), pushpinOptions);
         SC.map.entities.push(SC.pushpin_address);

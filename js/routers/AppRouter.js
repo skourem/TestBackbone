@@ -18,7 +18,7 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         //fire device's GPS and then set model's latlng for DOM changes
         SC.fireGPS(function(position){
             console.log(position.coords);
-            SC.latlng = {lat: position.coords.latitude, lng : position.coords.longitude };
+            SC.latlng = { lat: position.coords.latitude, lng : position.coords.longitude };
         });
     },
 

@@ -14,7 +14,8 @@
 			<% _.each(models, function(report) { %>
 			<li id="<%= report.id %>" class="table-view-cell">
 				<a id="category" class="push-right">
-				<%= report.attributes.address %>
+				<%= moment.unix(report.get('timestamp')).fromNow() %>
+				<%= report.get('address') %>
 				</a>
 				<button style="display:none;" class="btn btn-negative circle">x</button>
 			</li>

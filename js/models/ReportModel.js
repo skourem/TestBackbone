@@ -3,7 +3,8 @@ SC.Models.Report = Backbone.Model.extend({
 		'category' 		: '',
 		'address'		: '',
 		'latlng'		: '',
-		'description'	: ''
+		'description'	: '',
+		'timestamp'		: ''
 	}
 });
 
@@ -24,8 +25,13 @@ SC.Models.ReportList = Backbone.Collection.extend({
 	
 	model: SC.Models.Report,
 
-    localStorage: new Backbone.LocalStorage("SmartCitizen_Reports")
+    localStorage: new Backbone.LocalStorage("SmartCitizen_Reports"),
+
+    comparator : function( collection ){
+    	return( - collection.get( 'timestamp' ) );
+  	}
 
 });
 
 SC.Models.reports = new SC.Models.ReportList;
+
