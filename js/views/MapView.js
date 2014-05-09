@@ -90,6 +90,7 @@ SC.Views.MapView = Backbone.View.extend({
         Microsoft.Maps.Events.addHandler(SC.map, 'viewchange', function(){
             SC.pushpin.setLocation(SC.map.getCenter());
             SC.pushpin_address.setLocation(SC.map.getCenter());
+            self.$('#done').hide();
         });
         
         Microsoft.Maps.Events.addHandler(SC.map, 'viewchangeend', function(){  

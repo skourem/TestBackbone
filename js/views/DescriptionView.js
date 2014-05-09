@@ -49,8 +49,10 @@ SC.Views.DescriptionView = Backbone.View.extend({
         e.target.appendChild(spinner.el);
         $.get(postgis_url.join(''), function(data) {
             console.log(data);
-            var municipality = JSON.parse(data);
-            self.$('#modal_phones').html( _.template(self.modalPhonesHtml, municipality) ).slideDown({duration: 200});
+            if (data) {
+                var municipality = JSON.parse(data);
+                if (municipality.name) self.$('#modal_phones').html( _.template(self.modalPhonesHtml, municipality) ).slideDown({duration: 200});
+            }    
         }).always(function() {spinner.stop();});
     },
 

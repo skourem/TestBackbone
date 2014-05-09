@@ -2,7 +2,7 @@ SC.Views.HomeView = Backbone.View.extend({
 
     initialize: function () {
         this.listenTo(this.model, 'change:category', this.renderCategory);
-        this.listenTo(this.model, 'change:address', this.renderAddress);
+        this.listenTo(this.model, 'change:address',  this.renderAddress);
     },
 
     events : {
@@ -12,16 +12,18 @@ SC.Views.HomeView = Backbone.View.extend({
 
     render: function () {
         this.$el.html(this.template(this.model.attributes));
+        if (this.model.isNew()) this.$('#next').hide();
     },
 
     renderCategory : function() {
         var id = this.model.get('category');
         this.$('#category').text( this.model.get('categoryName')(id) );
+        if ( this.model.get('address') ) this.$('#next').show();
     },
 
     renderAddress : function() {
         this.$('#position_address').text( this.model.get('address') );
-        this.$('#next').show();
+        if ( this.model.get('category') ) this.$('#next').show();
     },
 
     navigateDescription : function() {
