@@ -21,7 +21,7 @@ SC.Views.DescriptionView = Backbone.View.extend({
 
     saveNewReport : function(e) {
         e.preventDefault();
-        this.model.set( { 'description' : this.$('#description').val().replace(/\r\n|\n/g, "\\n") } );
+        this.model.set( { 'description' : this.$('#description').val()} );
         this.model.set( { 'timestamp' : moment().unix() } );
         SC.reportList.add( this.model );
         this.model.save();
@@ -63,6 +63,11 @@ SC.Views.DescriptionView = Backbone.View.extend({
         e.preventDefault();
         window.history.back();
         return false;
+    },
+
+    close:function () {
+        $(this.el).unbind();
+        $(this.el).remove();
     }
 
 

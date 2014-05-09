@@ -10,7 +10,7 @@ SC.Views.CategoryView = Backbone.View.extend({
         var blabes  = _.where( SC.cat, {'group' : 'blabes'} ),
             diafora = _.where( SC.cat, {'group' : 'diafora'} );
 
-        this.$el.html(this.template( { 'blabes' : blabes, 'diafora' : diafora } ) );
+        this.$el.html(this.template( { 'blabes' : blabes, 'diafora' : diafora, 'category' : this.model.get('category') } ) );
         return this;
     },
 
@@ -23,7 +23,7 @@ SC.Views.CategoryView = Backbone.View.extend({
 
     setCategory : function(e) {
         e.preventDefault();
-        this.model.set( { category : this.$('.checked').text() } );
+        this.model.set( { category : this.$('.checked').attr('id') } );
         SC.router.navigate('home', {trigger: true});
         this.$('#doneCat').hide();
     },
@@ -33,6 +33,11 @@ SC.Views.CategoryView = Backbone.View.extend({
         //window.history.back();
         SC.router.navigate('home', {trigger: true});
         return false;
+    },
+
+    close:function () {
+        $(this.el).unbind();
+        $(this.el).remove();
     }
 
 });

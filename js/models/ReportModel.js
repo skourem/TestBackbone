@@ -4,7 +4,11 @@ SC.Models.Report = Backbone.Model.extend({
 		'address'		: '',
 		'latlng'		: '',
 		'description'	: '',
-		'timestamp'		: ''
+		'timestamp'		: '',
+		'categoryName'  : function(id) {
+			if (!id) id = this.category;
+			return id ? ( _.findWhere( SC.cat, { 'id' : id } ) ).name : '';
+		}
 	}
 });
 

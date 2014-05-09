@@ -7,6 +7,7 @@ SC.Views.HomeView = Backbone.View.extend({
 
     events : {
         "click #next" : "navigateDescription"
+        //"click .btn-back": "back"
     },
 
     render: function () {
@@ -14,7 +15,8 @@ SC.Views.HomeView = Backbone.View.extend({
     },
 
     renderCategory : function() {
-        this.$('#category').text( this.model.get('category') );
+        var id = this.model.get('category');
+        this.$('#category').text( this.model.get('categoryName')(id) );
     },
 
     renderAddress : function() {
@@ -24,5 +26,17 @@ SC.Views.HomeView = Backbone.View.extend({
 
     navigateDescription : function() {
         SC.router.navigate('description', {trigger: true});
+    },
+
+    back: function(e) {
+        e.preventDefault();
+        //window.history.back();
+        SC.router.navigate('', {trigger: true});
+        return false;
+    },
+    
+    close:function () {
+        $(this.el).unbind();
+        $(this.el).remove();
     }
 });

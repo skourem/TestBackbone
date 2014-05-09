@@ -1,7 +1,4 @@
 <header class="bar bar-nav">
-	<a class="btn btn-link btn-nav pull-left btn-back">
-        <span class="icon icon-left-nav"></span>Πίσω
-    </a>
 	<% if (models.length) {%>
 		<a class="icon icon-trash pull-right"></a>
 	<% } %>
@@ -12,10 +9,11 @@
 	<div class="card">
 		<ul class="table-view">
 			<% _.each(models, function(report) { %>
-			<li id="<%= report.id %>" class="table-view-cell">
+			<li class="table-view-cell report">
 				<a id="category" class="push-right" href="/#home/<%=report.id%>">
-				<%= moment.unix(report.get('timestamp')).fromNow() %>
-				<%= report.get('address') %>
+				<span style="font-weight: bold;"><%= report.get('categoryName')(report.get('category')) %></span><br/>
+				<%= report.get('address') %><br/>
+				<span style="float: right;margin-right:-50px;"><%= moment.unix(report.get('timestamp')).fromNow() %></span>
 				</a>
 				<button style="display:none;" class="btn btn-negative circle">x</button>
 			</li>

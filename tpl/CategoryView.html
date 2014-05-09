@@ -11,13 +11,13 @@
 			<li class="table-view-divider">Βλάβες</li>
 			<% _.each( blabes, function(elem) { %>
 			<li class="table-view-cell">
-				<a id=<%= elem.id %>><%= elem.name %> </a> 
+				<a id="<%= elem.id %>" class="<%= elem.id === category ? 'checked' : '' %>"><%= elem.name %> </a> 
 			</li>
 			<% }); %>
 			<li class="table-view-divider">Διάφορα</li>
 			<% _.each( diafora, function(elem) { %>
 			<li class="table-view-cell">
-				<a id=<%= elem.id %>><%= elem.name %></a> 
+				<a id="<%= elem.id %>" class="<%= elem.id === category ? 'checked' : '' %>"><%= elem.name %> </a>  
 			</li>
 			<% }); %>
 		</ul>

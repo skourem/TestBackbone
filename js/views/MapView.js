@@ -199,6 +199,11 @@ SC.Views.MapView = Backbone.View.extend({
         e.preventDefault();
         window.history.back();
         return false;
+    },
+
+    close:function () {
+        $(this.el).unbind();
+        $(this.el).remove();
     }
     /*
     searchAddress: function() {

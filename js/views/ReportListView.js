@@ -1,8 +1,7 @@
 SC.Views.ReportListView = Backbone.View.extend({
     
     initialize: function () {
-        this.listenTo(this.collection, 'destroy', this.removeReportFromDom);
-        this.listenTo(this.collection, 'sync', this.render);
+        this.listenTo(this.collection, 'destroy',   this.removeReportFromDom);
     },
 
     render: function () {
@@ -13,25 +12,26 @@ SC.Views.ReportListView = Backbone.View.extend({
     events : {
         "click .icon-trash" : "showDeleteBtns",
         "click .icon-close" : "hideDeleteBtns",
-        "click .btn-negative" : "destroyReport",
-        //"click #compose" : "newReport",
-        //"click li a" : "loadReport",
-        "click .btn-back": "back"
+        "click .btn-negative" : "destroyReport"
+        //"click .btn-back": "back"
     },
 
     showDeleteBtns : function(e) {
+        e.preventDefault();
         this.$('.btn-negative').show();
         this.$(e.target).removeClass('icon-trash').addClass('icon-close');
 
     },
 
     hideDeleteBtns : function(e) {
+        e.preventDefault();
         this.$('.btn-negative').hide();
         this.$(e.target).removeClass('icon-close').addClass('icon-trash');
 
     },
 
     destroyReport : function(e) {
+        e.preventDefault();
         var id = $(e.target).parent().attr('id');
         this.collection.get(id).destroy();
     },
@@ -46,6 +46,7 @@ SC.Views.ReportListView = Backbone.View.extend({
             this.$('a.icon.pull-left').hide();
         }  
         else li.remove();
+
     },
 
     loadReport : function(e) {
@@ -73,6 +74,11 @@ SC.Views.ReportListView = Backbone.View.extend({
     back: function() {
         window.history.back();
         return false;
+    },
+
+    close:function () {
+        $(this.el).unbind();
+        $(this.el).remove();
     }
 
 });

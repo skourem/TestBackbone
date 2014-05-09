@@ -34,7 +34,7 @@ var SC = {
 $(function () {
     if ( _.contains(['Win32','MacIntel'], navigator.platform) ) onDeviceReady();
     else document.addEventListener("deviceready", onDeviceReady, false);
-    
+   
     function onDeviceReady() {
         //load .html templates of views
         SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView", "AccountView"],
@@ -42,7 +42,7 @@ $(function () {
                 //FastClick.attach(document.body);
                 SC.router = new SC.Routers.AppRouter();
                 Backbone.history.start();
-                moment.lang('el');
+                
             }
         );
     }    

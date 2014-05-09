@@ -137,3 +137,7 @@ span.x-span {
   bottom: 0px;
   width: 100%;
 }
+
+li.report {
+  font-size: 14px;
+}
