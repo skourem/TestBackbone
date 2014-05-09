@@ -44,6 +44,7 @@ SC.Views.ReportListView = Backbone.View.extend({
         if ( ul.children().length === 1) {
             ul.parent().remove();
             this.$('a.icon.pull-left').hide();
+            this.render();
         }  
         else li.remove();
 

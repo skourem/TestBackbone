@@ -1,9 +1,5 @@
 SC.Views.AccountView = Backbone.View.extend({
 
-    initialize: function () {
-        //this.listenTo(this.model, 'change', this.uncheckSaveBtn);   
-    },
-
     events : {
         "keypress #account input" : "toggleSave",
         "click #save" : "saveAccount",

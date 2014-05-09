@@ -25,10 +25,6 @@ SC.Utils.templates = (function() {
 }());
 
 
-function htmlEncode(value) {
-    return $('<div/>').text(value).html();
-}
-
 $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();

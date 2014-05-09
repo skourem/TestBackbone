@@ -1,15 +1,17 @@
 <header class="bar bar-nav">
 	<% if (models.length) {%>
 		<a class="icon icon-trash pull-right"></a>
-	<% } %>
-    <h1 class="title">Αιτήματα</h1>
+		<h1 class="title">Αιτήματα</h1>
+	<% } else { %>
+    	<h1 class="title">SmartCitizen</h1>
+    <% } %>	
 </header>
 <div class="content">
 	<% if (models.length) {%>
 	<div class="card">
 		<ul class="table-view">
 			<% _.each(models, function(report) { %>
-			<li class="table-view-cell report">
+			<li id="<%= report.id %>" class="table-view-cell report">
 				<a id="category" class="push-right" href="/#home/<%=report.id%>">
 				<span style="font-weight: bold;"><%= report.get('categoryName')(report.get('category')) %></span><br/>
 				<%= report.get('address') %><br/>
@@ -21,8 +23,12 @@
 		</ul>
 	</div>
 	<% } else { %>
-	<div class="card">
-		<h5 align="center"> Δεν υπάρχουν αποθηκευμένα αιτήματα </h5>
+	<div class="card" align="center">
+		<a href="#home/new">
+		<h5> Γεια σου Έξυπνε Πολίτη! </h5>
+		<img src="images/active.png"/>
+		<h5> Δράσε τώρα δημιουργώντας ένα νέο αίτημα </h5>
+	</a>
 	</div>
 	<% } %>
 
@@ -34,6 +40,10 @@
 		<a id="compose" class="tab-item" href="#home/new">
 			<span class="icon icon-compose"></span>
 			<span class="tab-label">Νέο Αίτημα</span>
+		</a>
+		<a class="tab-item" href="#about">
+			<span class="icon icon-info"></span>
+			<span class="tab-label">SmartCitizen</span>
 		</a>
 	</nav>
 </div>

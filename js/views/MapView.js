@@ -12,7 +12,7 @@ SC.Views.MapView = Backbone.View.extend({
 
     events: {
         "click .btn-back" : "back",
-        "click #gps" : "clickGPS",
+        //"click #gps" : "clickGPS",
         "submit #address_form" : "searchAddressBing",
         "click #done" : "done",
         "click #terms" : "handleTermsLink"
@@ -30,9 +30,18 @@ SC.Views.MapView = Backbone.View.extend({
         setTimeout(function(){
            if (SC.bingMaps) self.initBingMap( latlng, zoom );
            else self.initLeafletMap( latlng, zoom );
+           var model_address = self.model.get('address');
+           if (model_address) this.$('#pp').text(model_address);
         });
         
+        
+
         return this;
+    },
+
+    renderMapView : function() {
+        var latlng = {lat: 39, lng: 22};
+        SC.map.setView({ zoom: 16, center: new Microsoft.Maps.Location(latlng.lat, latlng.lng) });
     },
 
     changeMapView_leaflet : function() {
@@ -43,7 +52,7 @@ SC.Views.MapView = Backbone.View.extend({
 
     changeMapView_bing : function() {
         var latlng = SC.Models.mediator.get('latlng');
-        SC.map.setView({ zoom: 16, center: new Microsoft.Maps.Location(latlng.lat, latlng.lng) })
+        SC.map.setView({ zoom: 16, center: new Microsoft.Maps.Location(latlng.lat, latlng.lng) });
     },
 
     changePopUpAddress_leaflet: function () {
@@ -52,7 +61,7 @@ SC.Views.MapView = Backbone.View.extend({
     },
 
     changePopUpAddress_bing: function () {
-       self.$('#pp').text(SC.Models.mediator.get('address'));
+       this.$('#pp').text(SC.Models.mediator.get('address'));
        this.$('#done').show();
     },
 
@@ -69,11 +78,11 @@ SC.Views.MapView = Backbone.View.extend({
         });
         SC.pushpin = new Microsoft.Maps.Pushpin(SC.map.getCenter(), null);
         SC.map.entities.push(SC.pushpin);
-
+        SC.clickGPS = this.clickGPS;
         var pushpinOptions = {
             width: null, 
             height: null,
-            htmlContent: '<div class="pushpin-arrow"><i id="gps" class="fa fa-location-arrow fa-2x"></i></div><div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
+            htmlContent: '<div onclick="SC.clickGPS()" class="pushpin-arrow"><i id="gps" class="fa fa-location-arrow fa-2x"></i></div><div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
         }; 
         SC.pushpin_address = new Microsoft.Maps.Pushpin(SC.map.getCenter(), pushpinOptions);
         SC.map.entities.push(SC.pushpin_address);
@@ -82,12 +91,14 @@ SC.Views.MapView = Backbone.View.extend({
             SC.pushpin.setLocation(SC.map.getCenter());
             SC.pushpin_address.setLocation(SC.map.getCenter());
         });
-        Microsoft.Maps.Events.addHandler(SC.map, 'viewchangeend', function(){
+        
+        Microsoft.Maps.Events.addHandler(SC.map, 'viewchangeend', function(){  
             var location = SC.pushpin.getLocation();
             var latlng = {lat:location.latitude, lng:location.longitude};
             SC.Models.mediator.set({ 'latlng' :  latlng }, {silent:true});
             self.searchLatLngBing(latlng);
         });
+        
     },
 
     initLeafletMap : function(center, zoom) {
@@ -128,9 +139,7 @@ SC.Views.MapView = Backbone.View.extend({
         
     },
 
-    clickGPS : function(e) {
-        e.preventDefault();
-        var self = this;
+    clickGPS : function() {
         SC.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);

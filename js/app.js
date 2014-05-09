@@ -37,7 +37,7 @@ $(function () {
    
     function onDeviceReady() {
         //load .html templates of views
-        SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView", "AccountView"],
+        SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView", "AccountView", "AboutView"],
             function () {
                 //FastClick.attach(document.body);
                 SC.router = new SC.Routers.AppRouter();

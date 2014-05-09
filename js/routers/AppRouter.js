@@ -8,7 +8,8 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         "category"       : "reportCategory",
         "description"    : "reportDescription",
         "map"            : "reportMap",
-        "account"        : "account" 
+        "account"        : "account",
+        "about"          : "about"
     },
 
     initialize: function () {  
@@ -25,9 +26,13 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     list: function () {
         SC.reportList = new SC.Models.ReportList();
         SC.reportList.fetch();
-        this.reportListView = new SC.Views.ReportListView( { collection : SC.reportList } );
-        this.reportListView.render();
-        SC.slider.slidePage(this.reportListView.$el);
+        //if (!SC.reportList.length) { 
+          //  this.reportHome('new');
+        //} else {
+            this.reportListView = new SC.Views.ReportListView( { collection : SC.reportList } );
+            this.reportListView.render();
+            SC.slider.slidePage(this.reportListView.$el);
+        //}
     },
 
     reportHome : function (id) {
@@ -55,7 +60,6 @@ SC.Routers.AppRouter = Backbone.Router.extend({
     },
 
     reportCategory : function () {
-        var self = this;
         if (!SC.id) this.categoryView.delegateEvents();
         this.categoryView.render();
         SC.slider.slidePage(this.categoryView.$el);
@@ -80,5 +84,15 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         } else this.accountView.delegateEvents();  
         this.accountView.render();
         SC.slider.slidePage(this.accountView.$el);
+    }, 
+
+    about: function () {
+        if (!this.aboutView) {
+            this.aboutView = new SC.Views.AboutView();
+        } else this.aboutView.delegateEvents();  
+        this.aboutView.render();
+        SC.slider.slidePage(this.aboutView.$el);
     }
+
+
 });

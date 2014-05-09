@@ -30,8 +30,7 @@ SC.Views.CategoryView = Backbone.View.extend({
 
     back: function(e) {
         e.preventDefault();
-        //window.history.back();
-        SC.router.navigate('home', {trigger: true});
+        window.history.back();
         return false;
     },
 
