@@ -1,31 +1,84 @@
 SC.Routers.AppRouter = Backbone.Router.extend({
 
     routes: {
-        ""                   : "home",
-        "home/:id"           : "home",
-        "category"           : "category",
-        "map"                : "map",
-        "description"        : "description",
-        "reportlist"         : "reportList",
+        ""                   : "list",
+        "home/:id"           : "reportHome",
+        "home/new"           : "reportHome",
+        "home"               : "reportHome",
+        "category"           : "reportCategory",
+        "description"        : "reportDescription",
+        "map"                : "reportMap",
         "account"            : "account" 
     },
 
     initialize: function () {
         SC.slider = new PageSlider($('body'));
-        SC.Models.reports.fetch();
-        SC.Models.accountInstance = new SC.Models.Account( JSON.parse( window.localStorage.getItem('SmartCitizen_account') ) || undefined  );
+
         SC.Models.mediator = new SC.Models.Mediator();
         //fire device's GPS and then set model's latlng for DOM changes
         SC.fireGPS(function(position){
             console.log(position.coords);
             SC.latlng = { lat: position.coords.latitude, lng : position.coords.longitude };
         });
-        SC.reportListView = new SC.Views.ReportListView({collection : SC.Models.reports});
-        SC.reportListView.render();
-
-        SC.Models.newReport = new SC.Models.Report();
     },
 
+    list: function () {
+        SC.reportList = new SC.Models.ReportList();
+        SC.reportList.fetch();
+        this.reportListView = new SC.Views.ReportListView( { collection : SC.reportList } );
+        this.reportListView.render();
+        SC.slider.slidePage(this.reportListView.$el);
+    },
+
+    reportHome : function (id) {
+        if (id) {
+            console.log(id);
+            SC.id = id;
+            this.report = id === 'new' ? new SC.Models.Report() : SC.reportList.get(id);
+            //if (this.homeView) this.homeView.close();
+            this.homeView = new SC.Views.HomeView( {model : this.report} );
+            this.homeView.render();
+            //constructing sub-views
+            this.categoryView       = new SC.Views.CategoryView( {model : this.report} );
+            this.descriptionView    = new SC.Views.DescriptionView( {model : this.report} );
+            this.mapView            = new SC.Views.MapView( {model : this.report} );
+        }
+        else { //we are re-using views and thus delegate events
+            SC.id = '';
+            this.homeView.delegateEvents();
+        }
+        SC.slider.slidePage(this.homeView.$el);
+    },
+
+    reportCategory : function () {
+        var self = this;
+        if (!SC.id) this.categoryView.delegateEvents();
+        this.categoryView.render();
+        SC.slider.slidePage(this.categoryView.$el);
+    },
+
+    reportDescription : function () {
+        if (!SC.id) this.descriptionView.delegateEvents();
+        this.descriptionView.render();
+        SC.slider.slidePage(this.descriptionView.$el);
+    },
+
+    reportMap : function () {
+        if (!SC.id) this.mapView.delegateEvents();
+        this.mapView.render();
+        SC.slider.slidePage(this.mapView.$el);
+    },
+
+    account: function () {
+        this.account = new SC.Models.Account( JSON.parse( window.localStorage.getItem('SmartCitizen_account') ) || undefined  );
+        if (!this.accountView) {//this.accountView.close();
+            this.accountView = new SC.Views.AccountView( { model : this.account } );
+        } else this.accountView.delegateEvents();  
+        this.accountView.render();
+        SC.slider.slidePage(this.accountView.$el);
+    },
+
+    /*
     home: function (id) {
         
         SC.Models.reportInstance = id ? SC.Models.reports.get(id) : SC.Models.newReport;
@@ -75,10 +128,7 @@ SC.Routers.AppRouter = Backbone.Router.extend({
 
     },
 
-    reportList: function () {
-        SC.reportListView.delegateEvents();
-        SC.slider.slidePage(SC.reportListView.$el);
-    },
+    
 
     account : function () {
         if (!SC.accountView) {
@@ -91,4 +141,5 @@ SC.Routers.AppRouter = Backbone.Router.extend({
         }
         SC.slider.slidePage(SC.accountView.$el);
     }
+    */
 });

@@ -14,7 +14,7 @@ SC.Views.ReportListView = Backbone.View.extend({
         "click .icon-trash" : "showDeleteBtns",
         "click .icon-close" : "hideDeleteBtns",
         "click .btn-negative" : "destroyReport",
-        "click #compose" : "newReport",
+        //"click #compose" : "newReport",
         //"click li a" : "loadReport",
         "click .btn-back": "back"
     },

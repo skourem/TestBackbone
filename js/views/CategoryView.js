@@ -24,13 +24,14 @@ SC.Views.CategoryView = Backbone.View.extend({
     setCategory : function(e) {
         e.preventDefault();
         this.model.set( { category : this.$('.checked').text() } );
-        SC.router.navigate('', {trigger: true});
+        SC.router.navigate('home', {trigger: true});
         this.$('#doneCat').hide();
     },
 
     back: function(e) {
         e.preventDefault();
-        window.history.back();
+        //window.history.back();
+        SC.router.navigate('home', {trigger: true});
         return false;
     }
 

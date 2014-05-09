@@ -33,5 +33,4 @@ SC.Models.ReportList = Backbone.Collection.extend({
 
 });
 
-SC.Models.reports = new SC.Models.ReportList;
 

@@ -21,6 +21,8 @@ SC.Views.MapView = Backbone.View.extend({
 
     render: function () {
         this.$el.html(this.template());
+        var model_latlng = this.model.get('latlng');
+        SC.latlng = model_latlng ? model_latlng : SC.latlng ;
         var self = this;
         var greece = {lat: 39, lng: 22}, //Greece!!!!
             latlng = SC.latlng ? SC.latlng : greece,
@@ -179,7 +181,7 @@ SC.Views.MapView = Backbone.View.extend({
         e.preventDefault();
         this.model.set({'address' : SC.Models.mediator.get('address')});
         this.model.set({'latlng'  : SC.Models.mediator.get('latlng')});
-        SC.router.navigate('#', {trigger: true});
+        SC.router.navigate('#home', {trigger: true});
         this.$('#done').hide();
     },
 
