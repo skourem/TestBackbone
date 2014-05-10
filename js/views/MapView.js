@@ -12,7 +12,7 @@ SC.Views.MapView = Backbone.View.extend({
 
     events: {
         "click .btn-back" : "back",
-        //"click #gps" : "clickGPS",
+        "click #gps" : "clickGPS",
         "submit #address_form" : "searchAddressBing",
         "click #done" : "done",
         "click #terms" : "handleTermsLink"
@@ -34,8 +34,6 @@ SC.Views.MapView = Backbone.View.extend({
            if (model_address) this.$('#pp').text(model_address);
         });
         
-        
-
         return this;
     },
 
@@ -78,11 +76,10 @@ SC.Views.MapView = Backbone.View.extend({
         });
         SC.pushpin = new Microsoft.Maps.Pushpin(SC.map.getCenter(), null);
         SC.map.entities.push(SC.pushpin);
-        SC.clickGPS = this.clickGPS;
         var pushpinOptions = {
             width: null, 
             height: null,
-            htmlContent: '<div onclick="SC.clickGPS()" class="pushpin-arrow"><i id="gps" class="fa fa-location-arrow fa-2x"></i></div><div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
+            htmlContent: '<div id="pp" class="pushpin-address">Αναζήτηση Δ/νσης...</div>'
         }; 
         SC.pushpin_address = new Microsoft.Maps.Pushpin(SC.map.getCenter(), pushpinOptions);
         SC.map.entities.push(SC.pushpin_address);
@@ -140,7 +137,8 @@ SC.Views.MapView = Backbone.View.extend({
         
     },
 
-    clickGPS : function() {
+    clickGPS : function(e) {
+        e.preventDefault();
         SC.fireGPS(function(position){
             console.log(position.coords);
             var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
