@@ -6,13 +6,14 @@ SC.Views.HomeView = Backbone.View.extend({
     },
 
     events : {
-        "click #next" : "navigateDescription"
-        //"click .btn-back": "back"
+        "click #next" : "navigateDescription",
+        "click .btn-back": "back"
     },
 
     render: function () {
         this.$el.html(this.template(this.model.attributes));
         if (this.model.isNew()) this.$('#next').hide();
+        return this;
     },
 
     renderCategory : function() {
@@ -26,14 +27,14 @@ SC.Views.HomeView = Backbone.View.extend({
         if ( this.model.get('category') ) this.$('#next').show();
     },
 
-    navigateDescription : function() {
+    navigateDescription : function(e) {
+        e.preventDefault();
         SC.router.navigate('description', {trigger: true});
     },
 
     back: function(e) {
         e.preventDefault();
-        //window.history.back();
-        SC.router.navigate('', {trigger: true});
+        window.history.back();
         return false;
     },
     

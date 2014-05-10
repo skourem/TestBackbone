@@ -36,7 +36,7 @@ SC.Views.DescriptionView = Backbone.View.extend({
     },
 
     callMunicipality : function(e) {
-    
+        e.preventDefault();
         var postgis_url = [], j = -1, self = this;
         var latlng = this.model.get('latlng');
         postgis_url[++j] = SC.root;

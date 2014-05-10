@@ -27,7 +27,8 @@ var SC = {
         {'id' : 'c7', 'name' : 'Καταστήματα',                        'group' : 'diafora'},
         {'id' : 'c8', 'name' : 'Άλλα θέματα',                        'group' : 'diafora'}
     ],
-    bingMaps : true
+    bingMaps : true,
+    history : {}
 };
 
 
@@ -39,7 +40,6 @@ $(function () {
         //load .html templates of views
         SC.Utils.templates.load(["HomeView", "MapView", "CategoryView", "DescriptionView", "ReportListView", "AccountView", "AboutView"],
             function () {
-                //FastClick.attach(document.body);
                 SC.router = new SC.Routers.AppRouter();
                 Backbone.history.start();
                 

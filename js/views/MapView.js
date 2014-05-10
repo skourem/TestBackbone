@@ -189,7 +189,7 @@ SC.Views.MapView = Backbone.View.extend({
         e.preventDefault();
         this.model.set({'address' : SC.Models.mediator.get('address')});
         this.model.set({'latlng'  : SC.Models.mediator.get('latlng')});
-        SC.router.navigate('#home', {trigger: true});
+        window.history.back();
         this.$('#done').hide();
     },
 

@@ -1,9 +1,9 @@
 SC.Views.CategoryView = Backbone.View.extend({
     
     events : {
-        "click .btn-back": "back",
         "click li a" : "toggleCheck",
-        "click #doneCat" : "setCategory"
+        "click #doneCat" : "setCategory",
+        "click .btn-back": "back"
     },
 
     render: function () {
@@ -11,6 +11,7 @@ SC.Views.CategoryView = Backbone.View.extend({
             diafora = _.where( SC.cat, {'group' : 'diafora'} );
 
         this.$el.html(this.template( { 'blabes' : blabes, 'diafora' : diafora, 'category' : this.model.get('category') } ) );
+
         return this;
     },
 
@@ -24,7 +25,7 @@ SC.Views.CategoryView = Backbone.View.extend({
     setCategory : function(e) {
         e.preventDefault();
         this.model.set( { category : this.$('.checked').attr('id') } );
-        SC.router.navigate('home', {trigger: true});
+        window.history.back();
         this.$('#doneCat').hide();
     },
 
@@ -38,5 +39,4 @@ SC.Views.CategoryView = Backbone.View.extend({
         $(this.el).unbind();
         $(this.el).remove();
     }
-
 });
