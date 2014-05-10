@@ -141,7 +141,7 @@ SC.Views.MapView = Backbone.View.extend({
         e.preventDefault();
         SC.fireGPS(function(position){
             console.log(position.coords);
-            var latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+            var latlng = {lat : position.coords.latitude, lng : position.coords.longitude};
             SC.Models.mediator.set({ 'latlng' : latlng });
         });
     },
