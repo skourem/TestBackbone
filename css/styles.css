@@ -109,7 +109,7 @@ span.x-span {
 .pushpin-address {
   width: 140px;
   position: relative;
-  bottom: 110px;
+  bottom: 140px;
   right: 55px;
   background: #428bca;
   -webkit-border-radius: 5px;
@@ -122,7 +122,7 @@ span.x-span {
 .pushpin-arrow {
   width: 30px;
   position: relative;
-  bottom: 84px;
+  bottom: 114px;
   right: 85px;
   background: #428bca;
   -webkit-border-radius: 5px;
@@ -134,8 +134,10 @@ span.x-span {
 .modal-bottom {
   display: none;
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   width: 100%;
+  z-index: 11;
+  margin-bottom: -7px;
 }
 
 li.report {

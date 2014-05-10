@@ -12,10 +12,10 @@
 		<ul class="table-view">
 			<% _.each(models, function(report) { %>
 			<li id="<%= report.id %>" class="table-view-cell report">
-				<a id="category" class="push-right" href="/#home/<%=report.id%>">
+				<a style="padding-right:10px;" id="category" class="push-right" href="#home/<%=report.id%>">
 				<span style="font-weight: bold;"><%= report.get('categoryName')(report.get('category')) %></span><br/>
 				<%= report.get('address') %><br/>
-				<span style="float: right;margin-right:-50px;"><%= moment.unix(report.get('timestamp')).fromNow() %></span>
+				<span style="float: right; font-size:12px;"><%= moment.unix(report.get('timestamp')).fromNow() %></span>
 				</a>
 				<button style="display:none;" class="btn btn-negative circle">x</button>
 			</li>
